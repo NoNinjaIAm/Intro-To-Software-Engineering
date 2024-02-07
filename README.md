@@ -8,10 +8,10 @@
 * Tate Smith -> @H-T-Smith
 
 ## Roles
-* Web Designer 1 -> Nicholas
-* Web Designer 2 -> Ethan
-* Database Developer -> Tate
-* Server Developer -> Shawn
+* Web Designer 1 -> Nicholas Jones
+* Web Designer 2 -> Ethan Herverly
+* Database Developer -> Tate Smith
+* Server Developer -> Shawn Butler
 
 ## Languages and Modules
 ### Languages: 
@@ -22,4 +22,4 @@
 
 ### Database: 
 * NoSQL
-* PyMongo 
+* MongoDB (PyMongo)
