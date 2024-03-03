@@ -1,4 +1,12 @@
-CREATE TYPE order_status AS ENUM ('current', 'past');
+
+CREATE TABLE user (
+    user_id INT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50)
+);
 
 CREATE TABLE inventory (
     item_id INT PRIMARY KEY,
@@ -19,14 +27,6 @@ CREATE TABLE review (
     FOREIGN KEY (item_id) REFERENCES inventory(item_id)
 );
 
-CREATE TABLE user (
-    user_id INT PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50)
-);
 
 CREATE TABLE shipping_address (
     address_id INT PRIMARY KEY,
@@ -52,7 +52,7 @@ CREATE TABLE payment_info (
 CREATE TABLE orders (
     order_id INT PRIMARY KEY,
     user_id INT NOT NULL,
-    status order_status NOT NULL,
+    status ENUM('current', 'past') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     delivered_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user(user_id)
@@ -65,5 +65,5 @@ CREATE TABLE cart (
     item_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(user_id),
     FOREIGN KEY (item_id) REFERENCES inventory(item_id),
-    FOREIGN KEY (order_id) REFERENCES order(order_id)
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
