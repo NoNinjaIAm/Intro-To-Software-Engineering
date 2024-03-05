@@ -4,7 +4,7 @@
 ## Contributors
 * Shawn Butler -> @ShawnButler2021
 * Nicholas Jones -> @NoNinjaIAm
-* Ethan Herverly -> @eahev123
+* Ethan Heverly -> @eahev123
 * Tate Smith -> @H-T-Smith
 
 ## Roles
