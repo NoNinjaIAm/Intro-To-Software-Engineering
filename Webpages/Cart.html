@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRUHB || Cart</title>
+
+    <style>
+        body {
+            background-color: #ece0a6;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item1 { grid-area: image; padding: 0; text-align: center;}
+        .item2 { grid-area: desc; padding: 5px; text-align: left;}
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+            'image desc desc';
+            background-color: #56614b;
+            padding: 5px;
+            gap: 5px;
+            margin: 10%;
+            margin-top: 20px;;
+            margin-bottom: 10px;
+        }
+
+        .grid-container > div {
+        background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .addRemoveQuantity {
+            background-color:#ab3735;
+            color: white;
+        }
+
+        .totalMoney {
+            text-align: right;
+            font-size: larger;
+            margin-top: 0;
+        }
+
+        .proceedPayment {
+            background-color:#0a93c5;
+            border: none;
+            color: white;
+            padding: 15px 16px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        
+        <div class="item1">
+            <img src="Apple.png" alt="image1" height="200px" width="200px">
+        </div>
+        
+        <div class="item2">
+            <p class="totalMoney">
+                Total: $0.00
+            </p>
+            <h2>
+                Fruit Name [Quanitity]
+            </h2>
+            <p>
+                Item Description
+            </p>
+            <form class="editCartQuantity" action="/action_page.php">
+                <button class="addRemoveQuantity" type="AddToQuantity">+</button>
+                <button class="addRemoveQuantity" type="RemoveFromQuantity">-</button>
+            </form>
+        </div>  
+
+        </div> 
+    </div>
+
+    <div>
+        <h1>
+            Total Payment: $0.00
+        </h1>
+        
+        <button class="proceedPayment" type="ProceedToPayment">Proceed To Payment</button>
+    </div>
+
+</body>
+</html>

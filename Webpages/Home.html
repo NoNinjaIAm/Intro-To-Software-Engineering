@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRUHB || Home</title>
+
+    <style>
+        .topnav {
+            background-color: #560202;
+            overflow: hidden;
+            
+        }       
+
+        .topnav a {
+            color: #f2f2f2;
+            text-align: center;
+            padding: 10px 10px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.homeButton {
+            float: left;
+        }
+
+        .topnav a.topButtons {
+            float: right;
+        }
+
+        body {
+            background-color: #ece0a6;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .searchButtons {
+            margin: 10px 10px 10px 200px;
+        }  
+
+
+
+        .buzzWordRow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        .buzzWord {
+            width: 200px;
+            height: 120px;
+            margin: 30px 10% 30px 10%;
+            background-color: #ab3735;
+            color: white;
+            text-align: center;
+            line-height: 100px;
+            border-radius: 5px;
+            font-size: 100%;
+        }
+
+
+
+        .item1 { grid-area: header; padding: 10px; text-align: center; font-size: 30px;}
+        .item2 { grid-area: image1; padding: 0; text-align: center;}
+        .item3 { grid-area: desc1; padding: 5px; text-align: left;}
+        .item4 { grid-area: image2; padding: 0; text-align: center;}
+        .item5 { grid-area: desc2; padding: 5px; text-align: left;}
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+            'header header header'
+            'image1 desc1 desc1'
+            'image2 desc2 desc2';
+            background-color: #7a9163;
+            padding: 10px;
+            gap: 10px;
+            margin: 10%;
+            margin-top: 20px;;
+            margin-bottom: 10px;
+        }
+
+        .grid-container > div {
+        background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .addToCart {
+            background-color:#ab3735;
+            color: white;
+        }
+
+
+        .moreButton {
+            background-color:#ab3735;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 0 35%;
+            cursor: pointer;
+        }
+
+
+        .bottomContacts {
+        background-color: #517c58;
+        overflow: hidden;
+        padding: 10px;
+        margin-top: 50px;
+        color: rgb(164, 217, 234);
+        }
+        
+
+
+    </style>
+</head>
+<body>
+    <!-- Top Bar Stuff-->
+    <div class="topnav">
+        <a class="homeButton" href="#home">
+            <img src="FRUHBLogo.png" alt="Logo" height="60px" width="100px">
+        </a>
+        <a class="topButtons" href="#profile">
+            <img src="ProfileIcon.png" alt="Profile" height="60px" width="60px">
+        </a>
+        <a class="topButtons" href="#settings">
+            <img src="SettingsIcon.png" alt="Settings" height="60px" width="60px">
+        </a>
+        <a class="topButtons" href="#cart">
+            <img src="CartIcon.png" alt="Cart" height="60px" width="60px">
+        </a>
+        <a class="topButtons" href="#orderHistory">
+            <img src="OrderHistoryIcon.png" alt="OrderHistoryIcon" height="60px" width="60px">
+        </a>
+        <form class="searchButtons" class="topButtons" action="/action_page.php">
+            <input type="text" placeholder="Search..">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Buzz word stuff-->
+    <div class="buzzWordRow">
+        <p class="buzzWord">Words!</p>
+        <p class="buzzWord">Words!</p>
+        <p class="buzzWord">Words!</p>
+    </div>
+
+    <!-- Featured Fruits -->
+    <div class="grid-container">
+        <div class="item1">Featured Fruits!!</div>
+        
+        <div class="item2">
+            <img src="Apple.png" alt="image1" height="200px" width="200px">
+        </div>
+        
+        <div class="item3">
+            <h2>
+                Fruit Name
+            </h2>
+            <p>
+                Item Description
+            </p>
+            <form class="addToCartForm" action="/action_page.php">
+                <button class="addToCart" type="AddToCart">Add To Cart</button>
+            </form>
+        </div>  
+        
+        <div class="item4">
+            <img src="Apple.png" alt="image1" height="200px" width="200px">
+        </div> 
+        
+        <div class="item5">
+            <h2>
+                Fruit Name
+            </h2>
+            <p>
+                Item Description
+            </p>
+            <form class="addToCartForm" action="/action_page.php">
+                <button class="addToCart" type="AddToCart">Add To Cart</button>
+            </form>
+
+        </div> 
+      </div>
+
+      <!-- More Fruits -->
+      <button class="moreButton">More Fruits</button>
+
+      <!-- Featured Veggies -->
+      <div class="grid-container">
+        <div class="item1">Featured Veggies!!</div>
+        
+        <div class="item2">
+            <img src="broc.png" alt="image1" height="200px" width="200px">
+        </div>
+        
+        <div class="item3">
+            <h2>
+                Veggie Name
+            </h2>
+            <p>
+                Item Description
+            </p>
+            <form class="addToCartForm" action="/action_page.php">
+                <button class="addToCart" type="AddToCart">Add To Cart</button>
+            </form>
+        </div>  
+        
+        <div class="item4">
+            <img src="broc.png" alt="image1" height="200px" width="200px">
+        </div> 
+        
+        <div class="item5">
+            <h2>
+                Veggie Name
+            </h2>
+            <p>
+                Item Description
+            </p>
+            <form class="addToCartForm" action="/action_page.php">
+                <button class="addToCart" type="AddToCart">Add To Cart</button>
+            </form>
+
+        </div> 
+      </div>
+    
+      <!-- More Veggies -->
+      <button class="moreButton">More Veggies</button>
+
+      <!-- Bottom of page -->
+      <address class="bottomContacts">
+        Contact Us!!!<br>
+        (420)-420-6969<br>
+        realEmailAddress@gmail.com<br>
+      </address>
+
+</body>
+</html>

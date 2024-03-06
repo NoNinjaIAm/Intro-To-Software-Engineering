@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRUHB || Settings</title>
+
+    <style>
+
+        body {
+            background-color: #ece0a6;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 10px;
+        }
+
+        ul {
+            border-radius: 5px;
+            border-style: double;
+            border-color: #ab3735;
+            border-width: 10px;
+            margin: 10%;
+            color: #560202;
+        }
+
+        .settingsBut {
+            background-color:#ab3735;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .deleteAccountBut {
+            background-color: white;
+            color: red;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+
+
+        .topnav {
+            background-color: #560202;
+            overflow: hidden;
+            
+        }       
+
+        .topnav a {
+            color: #f2f2f2;
+            text-align: center;
+            padding: 10px 10px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.homeButton {
+            float: left;
+        }
+
+        .topnav a.topButtons {
+            float: right;
+        }
+
+        body {
+            background-color: #ece0a6;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .searchButtons {
+            margin: 10px 10px 10px 200px;
+        }  
+
+    </style>
+
+</head>
+<body>
+
+    <!-- Top Bar Stuff-->
+    <div class="topnav">
+        <a class="homeButton" href="#home">
+            <img src="FRUHBLogo.png" alt="Logo" height="60px" width="100px">
+        </a>
+        <a class="topButtons" href="#profile">
+            <img src="ProfileIcon.png" alt="Profile" height="60px" width="60px">
+        </a>
+        <a class="topButtons" href="#settings">
+            <img src="SettingsIcon.png" alt="Settings" height="60px" width="60px">
+        </a>
+        <a class="topButtons" href="#cart">
+            <img src="CartIcon.png" alt="Cart" height="60px" width="60px">
+        </a>
+        <a class="topButtons" href="#orderHistory">
+            <img src="OrderHistoryIcon.png" alt="OrderHistoryIcon" height="60px" width="60px">
+        </a>
+        <form class="searchButtons" class="topButtons" action="/action_page.php">
+            <input type="text" placeholder="Search..">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div>
+        <ul>
+            <h1> Settings </h1>
+            <p> <strong>Username:</strong> ExUsername<br>
+                <strong>Email Address:</strong> ExEmail<br><br>
+                <strong>Shipping Information:</strong>
+                <address> 
+                    ExStreetAndHouseNum <br>
+                    State: ExState <br>
+                    City: ExCity <br>
+                    ZIP: ExZIP <br>
+                </address>
+            </p>
+
+            <button class="settingsBut">Edit Account Info</button>
+            <button class="settingsBut">Log Out</button>
+            <p><br><br></p>
+            <button class="deleteAccountBut">DELETE ACCOUNT</button>
+
+        </ul>
+
+        
+    </div>
+</body>
+</html>
