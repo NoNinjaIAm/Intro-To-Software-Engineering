@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" href="\css\Login.css">
+</head>
+<body>
+<form action="action_page.php" method="post">
+    <div class="imgcontainer">
+        <img src="https://cdn.discordapp.com/attachments/1199517565966372997/1208891985310519347/Fruhb.png?ex=65ee29e5&is=65dbb4e5&hm=3517dabc00baba8bf9d0631add1ce6052ddd1c385032cfb13ecf8d313edad562&" alt="Avatar" class="avatar">
+    </div>
+    <div class="container">
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="uname" required>
+        <label for="psw"><b>Password</b></label>
+        <input type="text" placeholder="Enter Password" name="psw" required>
+        <button type="submit">Login</button>
+        <label>
+            <input type="checkbox" checked="checked" name="remember">Remember me
+        </label>
+    </div>
+    <div class="container" style="background-color:#ece0a6">
+        <button type="button" class="cancelbtn">Cancel</button>
+        <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+</form>
+</body>
+</html>
