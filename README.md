@@ -9,7 +9,7 @@
 
 ## Roles
 * Web Designer 1 -> Nicholas Jones
-* Web Designer 2 -> Ethan Herverly
+* Web Designer 2 -> Ethan Heverly
 * Database Developer -> Tate Smith
 * Server Developer -> Shawn Butler
 
@@ -21,5 +21,5 @@
 * JavaScript
 
 ### Database: 
-* NoSQL
-* MongoDB (PyMongo)
+* SQL
+* mySQL
