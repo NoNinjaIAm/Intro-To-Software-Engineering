@@ -10,7 +10,7 @@ function randomize(spin)
     var spinVal, transVal, marginVal;
 
     // Random Rotation
-    spinVal = Math.floor(Math.random() * 90) + 1;
+    spinVal = Math.floor(Math.random() * 30) + 1;
     if((Math.floor(Math.random() * 2) + 1) == 1) {spinVal *= -1}
     transVal = "rotate(" + spinVal + "deg)";
 
