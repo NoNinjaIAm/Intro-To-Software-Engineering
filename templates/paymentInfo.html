@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRUHB || Payment Info</title>
+
+    <!-- linking css page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/paymentInfo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+<body>
+    <!-- nav bar -->
+    <div class="topnav">
+        <a class="homeButton" href="/">
+            <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
+        </a>
+
+
+        <form>
+            <input class="searchBar" type="text" placeholder="Search..">
+            <button class="searchButton" type="submit">Submit</button>
+        </form>
+
+
+        <a class="topButtons" href="/order-history">
+            <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
+        </a>
+        
+        <a class="topButtons" href="/cart">
+            <img src="{{ url_for('static', filename='images/cartIcon.png') }}" alt="Cart" height="90px" width="90px">
+        </a>
+        
+        <a class="topButtons" href="/settings">
+            <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
+        </a>
+
+        <a class="profileButton" href="/login">
+            <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Profile" height="90px" width="175px">
+        </a>
+    </div>
+
+    <form>
+
+        <ul>
+            <li>
+                <h1> Payment Information</h1>
+            </li>
+            <li>
+                <label for="name">Cardholder Name: </label>
+                <input type="text" id="name" name="Cardholder-name">
+            </li>
+            <li>
+                <label for="number">Card Number: </label>
+                <input type="text" id="cardNumber" name="Card-Number">
+            </li>
+            <li>
+                <label for="cvv">Card Number: </label>
+                <input type="text" id="cvvNumber" name="CVV-Code">
+            </li>
+            <li>
+                <label for="cvv">Expiration Date: </label>
+                <input type="month" id="cvvNumber" name="CVV-Code">
+            </li>
+            <li>
+                <a href="/settings">Change Shipping Address</a>
+            </li>
+            <li>
+                <h2>Total: $0.00</h2>
+            </li>
+
+            <li>
+                <button class="settingsButton">Submit Payment</button>
+            </li>
+
+        </ul>
+    </form>
+</body>
+</html>
