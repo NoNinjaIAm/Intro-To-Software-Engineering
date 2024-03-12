@@ -17,29 +17,6 @@
         <a class="homeButton" href="/">
             <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
         </a>
-
-
-        <form>
-            <input class="searchBar" type="text" placeholder="Search..">
-            <button class="searchButton" type="submit">Submit</button>
-        </form>
-
-
-        <a class="topButtons" href="/order-history">
-            <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/cart">
-            <img src="{{ url_for('static', filename='images/cartIcon.png') }}" alt="Cart" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/settings">
-            <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
-        </a>
-
-        <a class="profileButton" href="/login">
-            <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Profile" height="90px" width="175px">
-        </a>
     </div>
 
 
@@ -47,20 +24,47 @@
     <div>
         <ul>
             <h1> Settings </h1>
-            <p> <strong>Username:</strong> ExUsername<br>
-                <strong>Email Address:</strong> ExEmail<br><br>
-                <strong>Shipping Information:</strong>
-                <address> 
-                    ExStreetAndHouseNum <br>
-                    State: ExState <br>
-                    City: ExCity <br>
-                    ZIP: ExZIP <br>
-                </address>
+            <p> 
+                {% if not edit %}
+                    <strong>Username:</strong> {{ username }}<br/>
+                    <strong>Email Address:</strong> {{ email }}<br/>
+                    <address> 
+                        <strong>Shipping Information:</strong><br/>
+                        Address: {{ address }}<br/>
+                        State: {{ state }}<br/>
+                        City: {{ city }}<br/>
+                        ZIP: {{ zip }}<br/>
+                    </address>
+                {% endif %}
+
+                {% if edit %}
+                    <form action="/settings" method="POST">
+                        <strong>Username:</strong> 
+                        <br/><input type="text" name="new_username" class="inputText" placeholder="New Username..."><br/>
+
+                        <strong>Email Address:</strong>
+                        <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/><br/><br/>
+
+                        <address> 
+                            <strong>Shipping Information:</strong><br/>
+                            Address: <br/><input type="text" name="new_address" class="inputText" placeholder="New Address..."><br/>
+                            State: <br/><input type="text" name="new_state" class="inputText" placeholder="New State..."><br/>
+                            City: <br/><input type="text" name="new_city" class="inputText" placeholder="New City..."><br/>
+                            ZIP: <br/><input type="text" name="new_zip" class="inputText" placeholder="New ZIP..."><br/>
+                        </address>
+
+                        <br/>
+                        <input type="submit" name="new_info" value="Submit">
+                    </form>
+                {% endif %}
             </p>
 
-            <button class="settingsBut">Edit Account Info</button>
-            <button class="settingsBut">Log Out</button>
-            <p><br><br></p>
+            <form method='POST' action='/settings'>
+                <button type="submit" name="edit" class='settingsBut'>Edit Account Info</button>
+                <button type="submit" name="button" class='settingsBut'>Log Out</button>
+            </form>
+
+            <br><br>
             <button class="deleteAccountBut">DELETE ACCOUNT</button>
 
         </ul>
