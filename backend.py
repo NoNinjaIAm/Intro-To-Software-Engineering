@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
+import time
 
 web_app = Flask(__name__)
 
-
+nav_query = None
 user = {
   'username': 'sbb328',
   'password': 'xxx',
@@ -94,7 +95,38 @@ inventory = [
     'description': 'expensive'
   }
 ]
-
+order_history = [
+  [
+    {
+      'orderID': 10332,
+      'name': 'phone',
+      'quantity': 47,
+      'price': 10.00,
+      'description': 'kinda sucks',
+      'time': time.time(),
+      'paymentInfo': {
+        'name': 'Shawn Butler',
+        'number': '1111111111',
+        'cvv': '123',
+        'exp': 'fffff'
+      }
+    },
+    {
+      'orderID': 10332,
+      'name': 'ipod',
+      'quantity': 7,
+      'price': 15.00,
+      'description': 'sucks',
+      'time': time.time(),
+      'paymentInfo': {
+        'name': 'Shawn Butler',
+        'number': '1111111111',
+        'cvv': '123',
+        'exp': 'fffff'
+      }
+    }
+  ]
+]
 
 
 
@@ -104,25 +136,23 @@ def home_page():
   if request.method == "GET":
     return render_template('home.html', fruits=featured_fruits, veggies=featured_veggies)
 
-  elif request.method == "POST" and request.form['item_data']:
-    item_data = request.form['item_data']
-    
+  if request.method == "POST": 
+    if request.form['item_data']:
+      item_data = request.form['item_data']
+      
 
-    #splitting up csv data
-    item_data = item_data.split(",")
+      #splitting up csv data
+      item_data = item_data.split(",")
 
-    cart.append({
-      'name': item_data[0],
-      'quantity': int(item_data[1]),
-      'price': float(item_data[2]),
-      'description': item_data[3]
-      })
+      cart.append({
+        'name': item_data[0],
+        'quantity': int(item_data[1]),
+        'price': float(item_data[2]),
+        'description': item_data[3]
+        })
 
 
-    return render_template('home.html', fruits=featured_fruits, veggies=featured_veggies)
-
-  elif request.method == "POST" and request.form['item_to_search']:
-    return render_template('home.html', fruits=featured_fruits, veggies=featured_veggies)
+      return render_template('home.html', fruits=featured_fruits, veggies=featured_veggies)
 
 
 @web_app.route("/cart", methods=["GET", "POST"])
@@ -176,20 +206,81 @@ def login_page():
   if request.method == 'GET':
     return render_template('login.html')
 
-@web_app.route("/payment-info")
+
+# cart is local and not global for some reason
+@web_app.route("/payment-info", methods=["GET","POST"])
 def payment_info_page():
-  return render_template('paymentInfo.html')
+  if request.method == "POST":
+    # set data
+    '''for item in cart:
+                  item['time'] = time.time()
+                  item['paymentInfo'] = {
+                    'name': request.form['cardholder-name'],
+                    'number': request.form['card-number'],
+                    'cvv': request.form['cvv-code'],
+                    'exp': request.form['exp-date']
+                  }'''
+
+    # reset cart
+    order_history.append(cart)
+    cart = []
+
+    # update database
+    print(f"cart => {cart}")
+    print(f"order history => {order_history}")
+    redirect(url_for('/order-history'))
+  
+  if request.method == "GET":
+    cart_sum = 0
+    for item in order_history[-1]:
+      cart_sum += float(item['quantity']) * item['price']
+
+    total = "{:.2f}".format(cart_sum)
+    return render_template('paymentInfo.html', total=total)
 
 @web_app.route("/register-account")
 def register_account_page():
   return render_template('registerAccount.html')
 
+
+
+
 @web_app.route("/search", methods=["GET","POST"])
 def search_page():
-  return render_template('search.html')
+  if request.method == "POST":
+    if 'query' in request.form:
+      query = request.form['query']
+      
+
+      products_to_display = []
+
+      for item in inventory:
+        if query in item['name']:
+          products_to_display.append(item)
+
+      return render_template('search.html', list=products_to_display)
+  
 
 
-  return render_template('search.html')
+  if request.method == "POST":
+    item_data = request.form['item_data']
+      
+
+    #splitting up csv data
+    item_data = item_data.split(",")
+
+    cart.append({
+      'name': item_data[0],
+      'quantity': int(item_data[1]),
+      'price': float(item_data[2]),
+      'description': item_data[3]
+      })
+
+
+    return render_template('search.html')
+  if request.method == "GET":
+    return render_template('search.html')
+
 
 @web_app.route("/settings", methods=["GET", "POST"])
 def settings_page():
@@ -230,10 +321,14 @@ def settings_page():
 
     #if logout
 
-
-@web_app.route("/order-history")
+@web_app.route("/order-history", methods=["GET","POST"])
 def order_history_page():
-  return render_template('orderHistory.html')
+  cart_sum = 0
+  for order in order_history:
+    for item in order:
+      cart_sum += float(item['quantity']) * item['price']
+  return render_template('orderHistory.html', order_history=order_history)
+
 
 
 if __name__ == '__main__':
