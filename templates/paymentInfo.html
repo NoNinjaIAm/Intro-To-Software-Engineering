@@ -19,36 +19,36 @@
 
     <br/>
     
-    <form>
+    <form method="POST">
         <ul>
             <li>
-                <h1> Payment Information</h1>
+                <h1>Payment Information</h1>
             </li>
             <li>
                 <label for="name">Cardholder Name: </label>
-                <input type="text" id="name" name="Cardholder-name">
+                <input type="text" id="name" name="cardholder-name">
             </li>
             <li>
                 <label for="number">Card Number: </label>
-                <input type="text" id="cardNumber" name="Card-Number">
+                <input type="text" id="cardNumber" name="card-number">
             </li>
             <li>
-                <label for="cvv">Card Number: </label>
-                <input type="text" id="cvvNumber" name="CVV-Code">
+                <label for="cvv">CVV: </label>
+                <input type="text" id="cvvNumber" name="cvv-code">
             </li>
             <li>
                 <label for="cvv">Expiration Date: </label>
-                <input type="month" id="cvvNumber" name="CVV-Code">
+                <input type="month" id="expDate" name="exp-date">
             </li>
             <li>
                 <a href="/settings">Change Shipping Address</a>
             </li>
             <li>
-                <h2>Total: $0.00</h2>
+                <h2>Total: ${{ total }}</h2>
             </li>
 
             <li>
-                <button class="settingsButton">Submit Payment</button>
+                <input class="settingsButton" type="submit" value="Submit Payment">
             </li>
 
         </ul>

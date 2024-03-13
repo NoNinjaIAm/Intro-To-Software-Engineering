@@ -18,12 +18,9 @@
             <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
         </a>
 
-
-        <form>
-            <input class="searchBar" type="text" placeholder="Search..">
-            <button class="searchButton" type="submit">Submit</button>
-        </form>
-
+        <a class="homeButton" href="/search">
+            <img src="{{ url_for('static', filename='images/searchButton.png') }}" alt="Logo" height="90px" width="175px">
+        </a>
 
         <a class="topButtons" href="/order-history">
             <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
