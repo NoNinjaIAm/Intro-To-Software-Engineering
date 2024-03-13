@@ -70,12 +70,27 @@ DELETE_ORDER_BY_ID = """
 DELETE FROM orders WHERE order_id = {order_id};
 """
 
-DROP_ALL_TABLES = """
-DROP TABLE IF EXISTS cart;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS payment_info;
-DROP TABLE IF EXISTS shipping_address;
-DROP TABLE IF EXISTS review;
-DROP TABLE IF EXISTS inventory;
-DROP TABLE IF EXISTS user;
-"""
+# DROP queries
+drop_queries = {
+    'DROP_CART_TABLE': """
+        DROP TABLE IF EXISTS cart;
+    """,
+    'DROP_ORDERS_TABLE': """
+        DROP TABLE IF EXISTS orders;
+    """,
+    'DROP_PAYMENT_INFO_TABLE': """
+        DROP TABLE IF EXISTS payment_info;
+    """,
+    'DROP_SHIPPING_ADDRESS_TABLE': """
+        DROP TABLE IF EXISTS shipping_address;
+    """,
+    'DROP_REVIEW_TABLE': """
+        DROP TABLE IF EXISTS review;
+    """,
+    'DROP_INVENTORY_TABLE': """
+        DROP TABLE IF EXISTS inventory;
+    """,
+    'DROP_USER_TABLE': """
+        DROP TABLE IF EXISTS user;
+    """
+}

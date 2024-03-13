@@ -1,18 +1,24 @@
-import os
 import queries
 import sql_functions
 
 # Database connection details
-host = os.environ.get('DB_HOST')
-user = os.environ.get('DB_USER')
-password = os.environ.get('DB_PASSWORD')
-database = os.environ.get('DB_DATABASE')
+database_file = "database.db"
 
-conn = sql_functions.create_connection(host, user, password, database)
+# Create SQLite connection
+conn = sql_functions.create_connection(database_file)
 
-print(sql_functions.execute_statement(conn, queries.DROP_ALL_TABLES, multi=True))
-print(sql_functions.execute_sql_file(conn, "init_database.sql"))
-print(sql_functions.execute_sql_file(conn, "add_test_data.sql"))
-print(sql_functions.execute_statement(conn, queries.SELECT_ALL_USERS))
+for query in queries.drop_queries.values():
+    sql_functions.execute_statement(conn, query, fetch_results=False)
 
+# Execute schema initialization SQL file
+schema_file_path = "init_database.sql"
+sql_functions.execute_sql_file(conn, schema_file_path, fetch_results=False)
+
+# Execute SQL file with test data
+test_data_file_path = "add_test_data.sql"
+sql_functions.execute_sql_file(conn, test_data_file_path, fetch_results=False)
+
+sql_functions.execute_statement(conn, queries.SELECT_ALL_USERS)
+
+# Close the SQLite connection
 conn.close()

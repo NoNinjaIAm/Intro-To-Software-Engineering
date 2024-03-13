@@ -50,9 +50,9 @@ CREATE TABLE payment_info (
 );
 
 CREATE TABLE orders (
-    order_id INT PRIMARY KEY,
-    user_id INT NOT NULL,
-    status ENUM('current', 'past') NOT NULL,
+    order_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    status TEXT CHECK(status IN ('current', 'past')) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     delivered_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user(user_id)
