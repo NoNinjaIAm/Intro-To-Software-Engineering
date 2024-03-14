@@ -3,7 +3,7 @@ import time
 
 web_app = Flask(__name__)
 
-nav_query = None
+
 user = {
   'username': 'sbb328',
   'password': 'xxx',
@@ -155,6 +155,7 @@ def home_page():
       return render_template('home.html', fruits=featured_fruits, veggies=featured_veggies)
 
 
+# cart is local and not global
 @web_app.route("/cart", methods=["GET", "POST"])
 def cart_page():
   if request.method == "POST":
@@ -190,12 +191,6 @@ def login_page():
     password = request.form['psw']
     remember_me = request.form['remember']
 
-    # process data
-    # TODO: valid inputs based on database
-
-
-    # insecure; change to a default and a valid==True
-    # TODO: redirect to home and be a user
     if valid == False:
       msg = "Invalid username or password."
       return render_template('login.html', failure_message=msg)
@@ -238,12 +233,40 @@ def payment_info_page():
     total = "{:.2f}".format(cart_sum)
     return render_template('paymentInfo.html', total=total)
 
-@web_app.route("/register-account")
+# user is local and not global
+@web_app.route("/register-account", methods=["GET","POST"])
 def register_account_page():
-  return render_template('registerAccount.html')
+  if request.method == "GET":
+    return render_template('registerAccount.html')
+
+  if request.method == "POST":
+    new_email = request.form["email"]
+    new_psw = request.form["psw"]
+    psw_repeat = request.form["psw-repeat"]
+
+    if new_psw != psw_repeat:
+      return render_template('registerAccount.html', incorrect=True)
 
 
+    # adding to user
+    user = {
+      'username': 'None',
+      'password': new_psw,
+      'email': new_email,
+      'shipping_information': {
+        'address': 'None',
+        'state': 'None',
+        'city': 'None',
+        'zip': 'None'
+      }
+    }
+    user['username'] = 'None'
+    user['password'] = new_psw
+    user['email'] = new_email
+    for item in user['shipping_information']:
+      item = 'None'
 
+    return render_template('registerAccount.html', incorrect=False)
 
 @web_app.route("/search", methods=["GET","POST"])
 def search_page():
@@ -281,9 +304,10 @@ def search_page():
   if request.method == "GET":
     return render_template('search.html')
 
-
+# user is local and not global
 @web_app.route("/settings", methods=["GET", "POST"])
 def settings_page():
+  print(user)
   if request.method == 'GET':
     return render_template('settings.html', edit=False,
       username=user['username'],
@@ -321,6 +345,7 @@ def settings_page():
 
     #if logout
 
+# cart is local and not global
 @web_app.route("/order-history", methods=["GET","POST"])
 def order_history_page():
   cart_sum = 0
