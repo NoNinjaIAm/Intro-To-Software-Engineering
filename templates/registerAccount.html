@@ -39,11 +39,23 @@
         </a>
     </div>
 
-    <form action="action_page.php">
+    <form method="POST">
         <div class="container">
             <h1>Register</h1>
             <p>Please fill in this form to create an account</p>
             <hr>
+
+            {% if incorrect %}
+                <div style="width:15%; background:white; color:red; margin-left: 3%">
+                    Passwords do not match.
+                </div><br/>
+            {% endif %} 
+
+            {% if not incorrect %}
+                <div style="width:15%; margin-left: 3%">
+                    Account created.
+                </div><br/>
+            {% endif %} 
             <label for="email"><b>Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" id="email" required>
             <label for="psw"><b>Password</b></label>
@@ -58,5 +70,12 @@
             <p>Already have an account? <a href="/login">Sign in</a></p>
         </div>
     </form>
+
+
+
+
+
+
+
 </body>
 </html>
