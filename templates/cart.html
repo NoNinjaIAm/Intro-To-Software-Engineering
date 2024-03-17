@@ -53,17 +53,19 @@
         
         <div class="item2">
             <p class="totalMoney">
-                Item Price: ${{ item['price'] }} <br/>
-                Total: ${{ item['price']*item['quantity'] }}
+                Item Price: ${{ item[3] }} <br/>
+                Total: ${{ item[3]*item[2] }}
             </p>
             <h2>
-                {{ item['quantity'] }} - {{ item['name'] }}
+                {{ item[2] }} - {{ item[1] }}
             </h2>
             <p>
+                <!-- description 
                 {{ item['description'] }}
+                -->
             </p>
             <form method="POST" class="editCartQuantity" action="/cart">
-                <input type="hidden" name="itemID" value="{{ item['name'] }}">
+                <input type="hidden" name="itemID" value="{{ item[0] }}">
                 <input class="addRemoveQuantity" name="action" type="submit" value='+'>
                 <input class="addRemoveQuantity" name="action" type="submit" value='-'>
             </form>

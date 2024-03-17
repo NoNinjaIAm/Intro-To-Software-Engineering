@@ -47,28 +47,26 @@
     {% endif %}
 
     <!-- printing out history -->
-    {% for order in order_history %}
-      {% for item in order %}
+    {% for item in order_history %}
       <div class="grid-container">
-          <h1>Order ID - {{ item['orderID'] }} </h1>
-          <div class="item1">
-              <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
-          </div>
-          
-          <div class="item2">
-              <p class="totalMoney">
-                  Item Price: ${{ item['price'] }} <br/>
-                  Total: ${{ item['price']*item['quantity'] }}
-              </p>
-              <h2>
-                  {{ item['quantity'] }} - {{ item['name'] }}
-              </h2>
-              <p>
-                  {{ item['description'] }}
-              </p>
-          </div>  
+        <h1>Order ID - {{ item['orderID'] }} </h1>
+        <div class="item1">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        
+        <div class="item2">
+            <p class="totalMoney">
+                Item Price: ${{ item['price'] }} <br/>
+                Total: ${{ item['price']*item['quantity'] }}
+            </p>
+            <h2>
+                {{ item['quantity'] }} - {{ item['name'] }}
+            </h2>
+            <p>
+                {{ item['description'] }}
+            </p>
         </div>  
-      {% endfor %}
+      </div>  
     {% endfor %}
 
     <!--

@@ -57,30 +57,27 @@
     </p>
     {% endif %}
     {% for item in list %}
-      <div class="grid-container">
+        <div class="grid-container">
           <div class="item1">
               <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
           </div>
           
           <div class="item2">
               <p class="totalMoney">
-                  Item Price: ${{ item['price'] }} <br/>
-                  Total: ${{ item['price']*item['quantity'] }}
+                  Item Price: ${{ item[3] }} <br/>
+                  Total: ${{ item[3]*item[2] }}
               </p>
               <h2>
-                  {{ item['quantity'] }} - {{ item['name'] }}
+                  {{ item[2] }} - {{ item[1] }}
               </h2>
-              <p>
-                  {{ item['description'] }}
-              </p>
               <!-- cart data submission -->
             <form class="addToCartForm" method="POST">
                 <input class="addToCart" type="submit" name="action" value="Add to Cart">
-                <input type="hidden" name="item_data" value="{{ item['name'] }},{{ item['quantity'] }},{{ item['price'] }},{{ item['description'] }}">
+                <input type="hidden" name="add" value="{{ item[0] }}">
             </form>
           </div>  
         </div>  
-      {% endfor %}
+    {% endfor %}
 
 
 
