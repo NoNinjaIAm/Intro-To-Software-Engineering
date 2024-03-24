@@ -16,12 +16,9 @@
             <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
         </a>
 
-
-        <form>
-            <input class="searchBar" type="text" placeholder="Search..">
-            <button class="searchButton" type="submit">Submit</button>
-        </form>
-
+        <a class="homeButton" href="/search">
+            <img src="{{ url_for('static', filename='images/searchButton.png') }}" alt="Logo" height="90px" width="175px">
+        </a>
 
         <a class="topButtons" href="/order-history">
             <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
@@ -40,7 +37,14 @@
         </a>
     </div>
 
+    {% if list | length == 0 %}
+    <p id="empty_cart">
+        No items in cart
+    </p>
+    {% endif %}
 
+    
+    {% for item in list %}
     <div class="grid-container">
         
         <div class="item1">
@@ -49,29 +53,36 @@
         
         <div class="item2">
             <p class="totalMoney">
-                Total: $0.00
+                Item Price: ${{ item[3] }} <br/>
+                Total: ${{ item[3]*item[2] }}
             </p>
             <h2>
-                Fruit Name [Quanitity]
+                {{ item[2] }} - {{ item[1] }}
             </h2>
             <p>
-                Item Description
+                <!-- description 
+                {{ item['description'] }}
+                -->
             </p>
-            <form class="editCartQuantity" action="/">
-                <button class="addRemoveQuantity" type="AddToQuantity">+</button>
-                <button class="addRemoveQuantity" type="RemoveFromQuantity">-</button>
+            <form method="POST" class="editCartQuantity" action="/cart">
+                <input type="hidden" name="itemID" value="{{ item[0] }}">
+                <input class="addRemoveQuantity" name="action" type="submit" value='+'>
+                <input class="addRemoveQuantity" name="action" type="submit" value='-'>
             </form>
         </div>  
 
         </div> 
     </div>
+    {% endfor %}
 
-    <div>
+    <div style="margin: 3%">
         <h1>
-            Total Payment: $0.00
+            Total Payment: ${{ sum }}
         </h1>
         
-        <button class="proceedPayment" type="ProceedToPayment">Proceed To Payment</button>
+        <form method="GET" action="/payment-info">
+            <input class="proceedPayment" type="submit" value="Proceed To Payment">
+        </form> 
     </div>
 
 </body>

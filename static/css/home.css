@@ -19,25 +19,26 @@
 /* Grid Stuff */
 .item1 { grid-area: header; padding: 10px; text-align: center; font-size: 30px;}
 .item2 { grid-area: image1; padding: 0; text-align: center;}
-.item3 { grid-area: desc1; padding: 5px; text-align: left;}
+.item3 { grid-area: desc1; padding: 5%; text-align: left;}
 .item4 { grid-area: image2; padding: 0; text-align: center;}
-.item5 { grid-area: desc2; padding: 5px; text-align: left;}
+.item5 { grid-area: desc2; padding: 5%; text-align: left;}
 .grid-container {
     display: grid;
     grid-template-areas:
-    'header header header'
-    'image1 desc1 desc1'
-    'image2 desc2 desc2';
+    'header header'
+    'image1 desc1'
+    'image2 desc2';
     background-color: #7a9163;
-    padding: 10px;
-    gap: 10px;
+    padding: 2.5%;
+    gap: 2%;
     margin: 10%;
-    margin-top: 20px;;
-    margin-bottom: 10px;
+    margin-top: 1%;
+    margin-bottom: 1.5%;
+    width: 70%;
 }
 
 .grid-container > div {
-background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .addToCart {
@@ -77,4 +78,10 @@ overflow: hidden;
 padding: 10px;
 margin-top: 50px;
 color: rgb(164, 217, 234);
+}
+
+
+hr {
+    width: 50%;
+    border: solid black 1px;
 }

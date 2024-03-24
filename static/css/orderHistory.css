@@ -1,39 +1,59 @@
-@media (min-width: 1025px) {
-    .h-custom {
-    height: 100vh !important;
-    }
-    }
-    
-    .horizontal-timeline .items {
-    border-top: 2px solid #ddd;
-    }
-    
-    .horizontal-timeline .items .items-list {
-    position: relative;
-    margin-right: 0;
-    }
-    
-    .horizontal-timeline .items .items-list:before {
-    content: "";
-    position: absolute;
-    height: 8px;
-    width: 8px;
-    border-radius: 50%;
-    background-color: #ddd;
-    top: 0;
-    margin-top: -5px;
-    }
-    
-    .horizontal-timeline .items .items-list {
-    padding-top: 15px;
-    }
-    /*Background */
-    body {
-        background-color: #ece0a6;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-    }
-    /*Code above and below sourced at:
-      https://mdbootstrap.com/docs/standard/extended/order-details/ */
+body {
+    background-color: #ece0a6;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.item1 { grid-area: image; padding: 0; text-align: center;}
+.item2 { grid-area: desc; padding: 5px; text-align: left;}
+.grid-container {
+    display: grid;
+    grid-template-areas:
+    'image desc desc';
+    background-color: #56614b;
+    padding: 5px;
+    gap: 5px;
+    margin: 10%;
+    margin-top: 20px;;
+    margin-bottom: 10px;
+}
+
+.grid-container > div {
+background-color: rgba(255, 255, 255, 0.8);
+}
+
+.addRemoveQuantity {
+    background-color:#ab3735;
+    color: white;
+}
+
+.totalMoney {
+    text-align: right;
+    font-size: larger;
+    margin-top: 0;
+}
+
+.proceedPayment {
+    background-color:#0a93c5;
+    border: none;
+    color: white;
+    padding: 15px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#empty_cart {
+    background-color: white;
+    font-size: 325%;
+    padding: 2%;
+    width: 50%;
+    margin: 5%;
+    border-radius: 3%;
+    border: solid black 3px;
+}

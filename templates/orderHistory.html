@@ -13,36 +13,63 @@
 <body>
     <!-- nav bar -->
     <div class="topnav">
-      <a class="homeButton" href="/">
-          <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
-      </a>
+        <a class="homeButton" href="/">
+            <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
+        </a>
 
+        <a class="homeButton" href="/search">
+            <img src="{{ url_for('static', filename='images/searchButton.png') }}" alt="Logo" height="90px" width="175px">
+        </a>
 
-      <form>
-          <input class="searchBar" type="text" placeholder="Search..">
-          <button class="searchButton" type="submit">Submit</button>
-      </form>
+        <a class="topButtons" href="/order-history">
+            <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
+        </a>
+        
+        <a class="topButtons" href="/cart">
+            <img src="{{ url_for('static', filename='images/cartIcon.png') }}" alt="Cart" height="90px" width="90px">
+        </a>
+        
+        <a class="topButtons" href="/settings">
+            <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
+        </a>
 
-
-      <a class="topButtons" href="/order-history">
-          <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
-      </a>
-      
-      <a class="topButtons" href="/cart">
-          <img src="{{ url_for('static', filename='images/cartIcon.png') }}" alt="Cart" height="90px" width="90px">
-      </a>
-      
-      <a class="topButtons" href="/settings">
-          <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
-      </a>
-
-      <a class="profileButton" href="/login">
-          <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Profile" height="90px" width="175px">
-      </a>
+        <a class="profileButton" href="/login">
+            <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Profile" height="90px" width="175px">
+        </a>
     </div>
 
 
+    <!-- if no order history -->
+    {% if order_history | length == 0 %}
+    <p id="empty_cart">
+        No items purchased
+    </p>
+    {% endif %}
 
+    <!-- printing out history -->
+    {% for item in order_history %}
+      <div class="grid-container">
+        <h1>Order ID - {{ item['orderID'] }} </h1>
+        <div class="item1">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        
+        <div class="item2">
+            <p class="totalMoney">
+                Item Price: ${{ item['price'] }} <br/>
+                Total: ${{ item['price']*item['quantity'] }}
+            </p>
+            <h2>
+                {{ item['quantity'] }} - {{ item['name'] }}
+            </h2>
+            <p>
+                {{ item['description'] }}
+            </p>
+        </div>  
+      </div>  
+    {% endfor %}
+
+    <!--
     <section class="h-100 h-custom" style="background-color: #ece0a6;">
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
@@ -129,5 +156,6 @@
           </div>
         </div>
       </section>
+    -->
 </body>
 </html>

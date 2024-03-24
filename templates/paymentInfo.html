@@ -15,65 +15,47 @@
         <a class="homeButton" href="/">
             <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
         </a>
-
-
-        <form>
-            <input class="searchBar" type="text" placeholder="Search..">
-            <button class="searchButton" type="submit">Submit</button>
-        </form>
-
-
-        <a class="topButtons" href="/order-history">
-            <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/cart">
-            <img src="{{ url_for('static', filename='images/cartIcon.png') }}" alt="Cart" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/settings">
-            <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
-        </a>
-
-        <a class="profileButton" href="/login">
-            <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Profile" height="90px" width="175px">
-        </a>
     </div>
 
-    <form>
-
+    <br/>
+    
+    <form method="POST">
         <ul>
             <li>
-                <h1> Payment Information</h1>
+                <h1>Payment Information</h1>
             </li>
             <li>
                 <label for="name">Cardholder Name: </label>
-                <input type="text" id="name" name="Cardholder-name">
+                <input type="text" id="name" name="cardholder-name">
             </li>
             <li>
                 <label for="number">Card Number: </label>
-                <input type="text" id="cardNumber" name="Card-Number">
+                <input type="text" id="cardNumber" name="card-number">
             </li>
             <li>
-                <label for="cvv">Card Number: </label>
-                <input type="text" id="cvvNumber" name="CVV-Code">
+                <label for="cvv">CVV: </label>
+                <input type="text" id="cvvNumber" name="cvv-code">
             </li>
             <li>
                 <label for="cvv">Expiration Date: </label>
-                <input type="month" id="cvvNumber" name="CVV-Code">
+                <input type="month" id="expDate" name="exp-date">
             </li>
             <li>
                 <a href="/settings">Change Shipping Address</a>
             </li>
             <li>
-                <h2>Total: $0.00</h2>
+                <h2>Total: ${{ total }}</h2>
             </li>
 
             <li>
-                <button class="settingsButton">Submit Payment</button>
+                <input class="settingsButton" type="submit" value="Submit Payment">
             </li>
 
         </ul>
     </form>
+
+    {% if paid == True %}
+        <p style="text-align: center; font-size: 130%; color: red;">Paid..</p>
+    {% endif %}
 </body>
 </html>

@@ -15,52 +15,34 @@
         <a class="homeButton" href="/">
             <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
         </a>
-
-
-        <form>
-            <input class="searchBar" type="text" placeholder="Search..">
-            <button class="searchButton" type="submit">Submit</button>
-        </form>
-
-
-        <a class="topButtons" href="/order-history">
-            <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/cart">
-            <img src="{{ url_for('static', filename='images/cartIcon.png') }}" alt="Cart" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/settings">
-            <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
-        </a>
-
-        <a class="profileButton" href="/login">
-            <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Profile" height="90px" width="175px">
-        </a>
     </div>
 
 
+    <form action="/login" method="post">
+        <div class="imgcontainer">
+            <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Avatar" class="avatar">
+        </div>
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname"  class="textbox" required>
+            <br/>
+            <label for="psw"><b>Password</b></label>
+            <input type="text" placeholder="Enter Password" name="psw" class="textbox" required>
+            <button class="loginButton" type="submit">Login</button>
+            <label>
+                <input type="checkbox" checked="checked" name="remember">Remember me
+            </label>
+        </div>
 
-<form action="action_page.php" method="post">
-    <div class="imgcontainer">
-        <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Avatar" class="avatar">
-    </div>
-    <div class="container">
-        <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname"  class="textbox" required>
-        <br/>
-        <label for="psw"><b>Password</b></label>
-        <input type="text" placeholder="Enter Password" name="psw" class="textbox" required>
-        <button class="loginButton" type="submit">Login</button>
-        <label>
-            <input type="checkbox" checked="checked" name="remember">Remember me
-        </label>
-    </div>
-    <div class="container" style="background-color:#ece0a6">
-        <button class="loginButton" type="button" class="cancelbtn">Cancel</button>
-        <span class="psw">Forgot <a href="#">password?</a></span>
-    </div>
-</form>
+        {% if failure_message %}
+        <div id="error-message">
+            <b>{{ failure_message }}</b>
+        </div>
+        {% endif %}
+    </form>
+
+    <form action="/register-account" method="GET">
+        <input type="submit" value="Create an account">
+    </form>
 </body>
 </html>

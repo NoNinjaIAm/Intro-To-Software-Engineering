@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,19 +13,15 @@
 </head>
 
 <body>
-
     <!-- nav bar -->
     <div class="topnav">
         <a class="homeButton" href="/">
             <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
         </a>
 
-
-        <form>
-            <input class="searchBar" type="text" placeholder="Search..">
-            <button class="searchButton" type="submit">Submit</button>
-        </form>
-
+        <a class="homeButton" href="/search">
+            <img src="{{ url_for('static', filename='images/searchButton.png') }}" alt="Logo" height="90px" width="175px">
+        </a>
 
         <a class="topButtons" href="/order-history">
             <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
@@ -44,7 +41,6 @@
     </div>
 
 
-
     <!-- Buzz word stuff-->
     <div class="buzzWordRow">
         <p class="buzzWord" id="randSpin1">Big Savings! </p>
@@ -55,110 +51,90 @@
     </div>
 
 
-
-
     <!-- Featured Fruits -->
     <div class="grid-container">
-        <div class="item1">Featured Fruits!!</div>
-        
-        <div class="item2">
-            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image" height="200px" width="200px">
+    <div class="item1">Featured Fruits!!</div>
+    {% for item in fruits %}
+        <div>
+            <div class="item2">
+                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image1" height="200px" width="200px">
+            </div>
+
+            <br/>
+            <hr/>
+
+            <div class="item3">
+                <h2>
+                {{ item[1] }}
+                </h2>
+                <p>
+                    <!--
+                {{ item[4] }}
+                    -->
+                </p>
+
+                <!-- cart data submission -->
+                <form class="addToCartForm" method="POST">
+                    <input class="addToCart" type="submit" name="action" value="Add to Cart">
+                    <input type="hidden" name="item_data" value="{{ item['name'] }},{{ item['quantity'] }},{{ item['price'] }},{{ item['description'] }}">
+                </form>
+            </div>  
         </div>
-        
-        <div class="item3">
-            <h2>
-                Fruit Name
-            </h2>
-            <p>
-                Item Description
-            </p>
-            <form class="addToCartForm" action="/action_page.php">
-                <button class="addToCart" type="AddToCart">Add To Cart</button>
-            </form>
-        </div>  
-        
-        <div class="item4">
-            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image1" height="200px" width="200px">
-        </div> 
-        
-        <div class="item5">
-            <h2>
-                Fruit Name
-            </h2>
-            <p>
-                Item Description
-            </p>
-            <form class="addToCartForm" action="/action_page.php">
-                <button class="addToCart" type="AddToCart">Add To Cart</button>
-            </form>
-        </div> 
+    {% endfor %} 
+    </div>
 
-      </div>
+    <form method="POST" action="/search">
+        <button class="moreButton">More Fruits</button>
+    </form>
+    <br><br><br><br>
 
 
 
-      <!-- More Fruits -->
-      <br><br>
-      <button class="moreButton">More Fruits</button>
-      <br><br>
+    <!-- Featured Veggies -->
+    <div class="grid-container">
+    <div class="item1">Featured Veggies!!</div>
+    {% for item in veggies %}
+        <div>
+            <div class="item2">
+                <img src="{{ url_for('static', filename='images/broc.png') }}" alt="image1" height="200px" width="200px">
+            </div>
 
+            <br/>
+            <hr/>
 
-
-
-      <!-- Featured Veggies -->
-      <br>
-      <div class="grid-container">
-        <div class="item1">Featured Veggies!!</div>
-        
-        <div class="item2">
-            <img src="{{ url_for('static', filename='images/broc.png') }}" alt="image1" height="200px" width="200px">
+            <div class="item3">
+                <h2>
+                {{ item[1] }}
+                </h2>
+                <p>
+                    <!--
+                {{ item[4] }}
+                    -->
+                </p>
+                <form class="addToCartForm" action="/cart">
+                    <button class="addToCart" type="AddToCart">Add To Cart</button>
+                </form>
+            </div>  
         </div>
-        
-        <div class="item3">
-            <h2>
-                Veggie Name
-            </h2>
-            <p>
-                Item Description
-            </p>
-            <form class="addToCartForm" action="/action_page.php">
-                <button class="addToCart" type="AddToCart">Add To Cart</button>
-            </form>
-        </div>  
-        
-        <div class="item4">
-            <img src="{{ url_for('static', filename='images/broc.png') }}" alt="image1" height="200px" width="200px">
-        </div> 
-        
-        <div class="item5">
-            <h2>
-                Veggie Name
-            </h2>
-            <p>
-                Item Description
-            </p>
-            <form class="addToCartForm" action="/action_page.php">
-                <button class="addToCart" type="AddToCart">Add To Cart</button>
-            </form>
+    {% endfor %} 
+    </div>
 
-        </div> 
-      </div>
-    
-      <!-- More Veggies -->
-      <br><br>
-      <button class="moreButton">More Veggies</button>
-      <br><br>
+    <form action="/search">
+        <button class="moreButton">More Veggies</button>
+    </form>
+    <br><br>
 
 
 
 
 
-      <!-- footer -->
-      <address class="bottomContacts">
+
+    <!-- footer -->
+    <address class="bottomContacts">
         Contact Us!!!<br>
         (123)-456-7890<br>
         realEmailAddress@gmail.com<br>
-      </address>
-
+    </address>
 </body>
+
 </html>
