@@ -5,6 +5,17 @@ import sql_functions as sf
 import random
 import hashlib
 
+# important global variable
+web_app = Flask(__name__)
+
+class User:
+    def __init__(self, user_id, username):
+        self.user_id = user_id
+        self.username = username
+username='\'jane_smith\''
+
+current_user = User(None, '\'None\'')
+
 
 def check_used_ids(connection):
   used_ids = sf.execute_statement(connection, f'SELECT item_id FROM inventory')
@@ -19,31 +30,42 @@ def check_used_ids(connection):
 
   return x
 
-def get_current_id(connection, username):
-  return sf.execute_statement(connection, f'SELECT user_id FROM user WHERE username={username}')[0][0]
+def get_current_id(connection):
+  return sf.execute_statement(connection, f'SELECT user_id FROM user WHERE username={current_user.username}')[0][0]
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
-
-
-def get_user_data(username):
+def get_user_data():
   with sf.create_connection('database.db') as conn:
-    user_data = sf.execute_statement(conn, f'SELECT username, email FROM user WHERE username={username}')[0]
-    shipping_data = sf.execute_statement(conn, f'SELECT street_address, city, state, postal_code FROM shipping_address WHERE user_id={get_current_id(conn, username)}')[0]
-    formatted_data = {
-      'username': user_data[0],
-      'email': user_data[1],
-      'address': shipping_data[0],
-      'city': shipping_data[1],
-      'state': shipping_data[2],
-      'zip': shipping_data[3]
-    }
+    user_data = sf.execute_statement(conn, f'SELECT username, email FROM user WHERE username={current_user.username}')[0]
+    try:
+      shipping_data = sf.execute_statement(conn, f'SELECT street_address, city, state, postal_code FROM shipping_address WHERE user_id={get_current_id(conn)}')[0]
+      formatted_data = {
+        'username': user_data[0],
+        'email': user_data[1],
+        'address': shipping_data[0],
+        'city': shipping_data[1],
+        'state': shipping_data[2],
+        'zip': shipping_data[3]
+      }
 
 
-    return formatted_data
+      return formatted_data
 
-def update_user_data(data, username):
+    except IndexError:
+      return {
+        'username': '\'None\'',
+        'email': '\'None\'',
+        'address': '\'None\'',
+        'city': '\'None\'',
+        'state': '\'None\'',
+        'zip': '\'None\''
+      }
+
+
+
+def update_user_data(data):
   with sf.create_connection('database.db') as conn:
     email = data['email']
     address = data['address']
@@ -51,18 +73,17 @@ def update_user_data(data, username):
     state = data['state']
     code = data['zip']
     print('\nUpdating user...')
-    sf.execute_statement(conn, f'UPDATE user SET username=\'{username}\',email=\'{email}\' WHERE user_id={get_current_id(conn, username)}')
+    sf.execute_statement(conn, f'UPDATE user SET username=\'{current_user.username}\',email=\'{email}\' WHERE user_id={get_current_id(conn)}')
 
     print('\nUpdating shipping...')
-    sf.execute_statement(conn, f'UPDATE shipping_address SET street_address=\'{address}\',city=\'{city}\' WHERE user_id={get_current_id(conn, username)}')
-    sf.execute_statement(conn, f'UPDATE shipping_address SET state=\'{state}\',postal_code=\'{code}\' WHERE user_id={get_current_id(conn, username)}')
-
+    sf.execute_statement(conn, f'UPDATE shipping_address SET street_address=\'{address}\',city=\'{city}\' WHERE user_id={get_current_id(conn)}')
+    sf.execute_statement(conn, f'UPDATE shipping_address SET state=\'{state}\',postal_code=\'{code}\' WHERE user_id={get_current_id(conn)}')
 
 def get_inventory():
   with sf.create_connection('database.db') as conn:
     return sf.execute_statement(conn, f'SELECT * FROM inventory')
 
-def add_to_inventory(item_data, username):
+def add_to_inventory(item_data):
   with sf.create_connection('database.db') as conn:
 
 
@@ -94,15 +115,12 @@ def add_to_inventory(item_data, username):
 
     print(f'inventory: {get_inventory()}')
 
-
-
-
-def get_cart(username):
+def get_cart():
   with sf.create_connection('database.db') as conn:
-    user_id = sf.execute_statement(conn, f'SELECT user_id FROM user WHERE username={username}')[0][0]
+    user_id = sf.execute_statement(conn, f'SELECT user_id FROM user WHERE username={current_user.username}')[0][0]
     item_id = sf.execute_statement(conn, f'SELECT item_id FROM cart WHERE user_id={user_id}')[0][0]
     cart = sf.execute_statement(conn, f'SELECT * FROM inventory WHERE item_id={item_id}')
-    print(f'\n{username[1:-1]}\'s cart: {cart}\n')
+    print(f'\n{current_user.username[1:-1]}\'s cart: {cart}\n')
     
 
     return cart
@@ -115,16 +133,16 @@ def delete_from_cart(item_id):
   with sf.create_connection('database.db') as conn:
     sf.execute_statement(conn, f'DELETE FROM inventory WHERE item_id={item_id}')
 
-def adding_to_cart(item_data, username):
+def adding_to_cart(item_data):
   with sf.create_connection('database.db') as conn:
-    cart = get_cart(username)
+    cart = get_cart()
 
     '''# clearing orders for testing
                     sf.execute_statement(conn, f'DELETE FROM orders')
                     orders = sf.execute_statement(conn, f'SELECT * FROM orders')
                     print(f'orders: {orders}\n')'''
     
-    user_id = sf.execute_statement(conn, f'SELECT user_id FROM user WHERE username={username}')[0][0]
+    user_id = sf.execute_statement(conn, f'SELECT user_id FROM user WHERE username={current_user.username}')[0][0]
     print(f'user id: {user_id}')
 
 
@@ -162,10 +180,6 @@ def adding_to_cart(item_data, username):
       for item in cart:
         print (item)
 
-
-
-
-
 def register_account(password, email):
   with sf.create_connection('database.db') as conn:
     hashed_password = hash_password(password)
@@ -180,36 +194,19 @@ def register_account(password, email):
 
     return False
 
-def edit_payment_info():
-  # if user has no payment info
-    # insert into
-
-
-  # if user has payment info
-    # update
-
-  pass
-
-def edit_shipping_info():
-  # if user has no shipping info
-    # insert into 
-
-
-  # if user has shipping info
-    # update
-
-  pass
+def change_user(new_username):
+  with sf.create_connection('database.db') as conn:
+    users_list = sf.execute_statement(conn, f'SELECT username FROM user WHERE username={new_username}')
+    if (users_list == []):
+      return False
+    print(f'Username is now {new_username}')
+    return new_username
 
 
 
 
 
 
-
-
-web_app = Flask(__name__)
-
-username='\'jane_smith\''
 
 
 
@@ -336,7 +333,7 @@ def home_page():
 
       #splitting up csv data
       item_data = item_data.split(",")
-      adding_to_cart(item_data, username)
+      adding_to_cart(item_data)
 
 
       return render_template('home.html', fruits=featured_fruits, veggies=featured_veggies)
@@ -381,16 +378,12 @@ def login_page():
   msg = ''
   if request.method == 'POST':
     valid = False
-    username = request.form['uname']
-    password = request.form['psw']
+    given_username = request.form['uname']
+    given_password = request.form['psw']
     remember_me = request.form['remember']
 
     # processing
-    results = sf.execute_statement(conn, f'SELECT username FROM user')
-    if results != None:
-      pass
-    else: 
-      valid = True
+    print(f'Given: {given_username}\n',f'Actual: {current_user.username}')
 
 
 
@@ -475,13 +468,11 @@ def search_page():
   if request.method == "GET":
     return render_template('search.html')
 
-
-
 # done
 @web_app.route("/settings", methods=["GET", "POST"])
 def settings_page():
   if request.method == 'GET':
-    user = get_user_data(username)
+    user = get_user_data()
     return render_template('settings.html', edit=False,
                   username=user['username'],
                   email=user['email'], 
@@ -495,7 +486,7 @@ def settings_page():
       return render_template('settings.html', edit=True)
 
     if 'new_info' in request.form:
-      user = get_user_data(username)
+      user = get_user_data()
       if request.form['new_email']: user['email'] = request.form['new_email']
       if request.form['new_address']: user['address'] = request.form['new_address']
       if request.form['new_state']: user['state'] = request.form['new_state']
@@ -503,7 +494,7 @@ def settings_page():
       if request.form['new_zip']: user['zip'] = request.form['new_zip']
 
 
-      update_user_data(user, username)
+      update_user_data(user)
 
 
       return render_template('settings.html', edit=False,
@@ -516,8 +507,6 @@ def settings_page():
 
     #if logout
 
-
-
 # done? 
 # item data not showing but that probably is a database problem
 @web_app.route("/order-history", methods=["GET","POST"])
@@ -527,7 +516,7 @@ def order_history_page():
   order_history = None
 
   with sf.create_connection('database.db') as conn:
-    order_history = sf.execute_statement(conn, f'SELECT * FROM orders WHERE user_id={get_current_id(conn, username)}')
+    order_history = sf.execute_statement(conn, f'SELECT * FROM orders WHERE user_id={get_current_id(conn)}')
 
   formatted_history = []
 
