@@ -1,47 +1,42 @@
-import mysql.connector
-from mysql.connector import Error
+import sqlite3
 
-# Function to create a MySQL database connection
-def create_connection(host, user, password, database):
+def create_connection(database_file):
     try:
-        connection = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
-        )
-        if connection.is_connected():
-            print(f"Connected to MySQL database: {database}")
-            return connection
-
-    except Error as e:
+        connection = sqlite3.connect(database_file)
+        print(f"Connected to SQLite database: {database_file}")
+        return connection
+    except sqlite3.Error as e:
         print(f"Error: {e}")
         return None
 
-# Function to execute an SQL statement and optionally fetch results
-def execute_statement(connection, statement, fetch_results=True, multi=False):
+def execute_statement(connection, statement, fetch_results=True):
     try:
         cursor = connection.cursor()
-        cursor.execute(statement, multi=multi)
+        cursor.execute(statement)
 
         if fetch_results:
-            return cursor.fetchall()
+            result = cursor.fetchall()
+            print(f"Statement executed successfully. Result: {result}")
+
         connection.commit()
 
-    except Error as e:
-        return f"Error executing statement: {e}"
+    except sqlite3.Error as e:
+        print(f"Error executing statement: {e}")
 
-# Function to run an SQL file and print the results
-def execute_sql_file(connection, file_path, multi=True):
+def execute_sql_file(connection, file_path, fetch_results=True):
     try:
         cursor = connection.cursor()
 
         with open(file_path, 'r') as file:
             sql_script = file.read()
-            cursor.execute(sql_script, multi=multi)
+
+            cursor.executescript(sql_script)
+
+        if fetch_results:
+            result = cursor.fetchall()
+            print(f"Statement executed successfully. Result: {result}")
 
         connection.commit()
-        return cursor.fetchall()
 
-    except Error as e:
-        return f"Error executing SQL file: {e}"
+    except sqlite3.Error as e:
+        print(f"Error executing SQL file: {e}")
