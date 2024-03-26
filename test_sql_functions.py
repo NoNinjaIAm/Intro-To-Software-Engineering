@@ -1,5 +1,6 @@
 import pytest
 from sql_functions import *
+from backend import *
 
 
 #   -- -- --TESTING FOR create_connection FUNCTION-- -- --  #
@@ -27,9 +28,9 @@ def test_create_connection_two():
 
 # Error testing with string (Should pass)
 def test_create_connection_three(capsys):
-    create_connection("SQLFunctionsTestingFile(DELETEME)")
+    create_connection("SQLFunctionsBlankFileTest")
     captured_stdout, captured_stderr = capsys.readouterr()
-    assert captured_stdout.strip() == "Connected to SQLite database: SQLFunctionsTestingFile(DELETEME)"
+    assert captured_stdout.strip() == "Connected to SQLite database: SQLFunctionsBlankFileTest"
 
 # Error testing with no arguments (Should Pass)
 def test_create_connection_four():
@@ -85,7 +86,7 @@ def test_execute_statement_three():
 
 # Testing with cursor type but an invalid statement (should pass)
 def test_execute_statement_four(capsys):
-    execute_statement(sqlite3.connect("SQLFunctionsTestingFile2(DELETEME)"), "NothingStatement", False)
+    execute_statement(sqlite3.connect("SQLFunctionsBlankFileTest"), "NothingStatement", False)
     captured_stdout, captured_stderr = capsys.readouterr()
     assert captured_stdout.strip() == 'Error executing statement: near "NothingStatement": syntax error'
     
@@ -134,7 +135,7 @@ def test_execute_sql_file_three():
 # Error testing with cursor type but nonsense file path (should pass)
 def test_execute_sql_file_four():
     try:
-        execute_sql_file(sqlite3.connect("SQLFunctionsTestingFile2(DELETEME)"), "InvalidFilePath/Nowhere/DollarGeneral")
+        execute_sql_file(sqlite3.connect("SQLFunctionsBlankFileTest"), "InvalidFilePath/Nowhere/DollarGeneral")
         assert False
     except FileNotFoundError:
         assert True
@@ -143,7 +144,79 @@ def test_execute_sql_file_four():
 
 # Error testing with cursor type but with empty file path (should fail)
 def test_execute_sql_file_five():
-    execute_sql_file(sqlite3.connect("SQLFunctionsTestingFile2(DELETEME)"), "")
+    execute_sql_file(sqlite3.connect("SQLFunctionsBlankFileTest"), "")
     captured_stdout, captured_stderr = capsys.readouterr()
     assert captured_stdout.strip() == "Error: No File Name Detected"
 
+
+
+
+
+#   -- -- --TESTING FOR add_to_inventory FUNCTION-- -- --   #
+randomDictionary = {"name": 'Nicholas', "desc": 'Is', "ID": 'Epic'}
+
+#Error testing with wrong data type integer (should pass)
+def test_add_to_inventory_one():
+    try:
+        add_to_inventory(1, 2)
+        assert False
+    except TypeError:
+        assert True
+    else: 
+        return False #Return false if Error happens but its wrong error type
+
+#Error testing null parameters (should pass)
+def test_add_to_inventory_two():
+    try:
+        add_to_inventory(None, None)
+        assert False
+    except TypeError:
+        assert True
+    else: 
+        return False #Return false if Error happens but its wrong error type
+
+#Error testing with random dictionary (should pass)
+def test_add_to_inventory_three():
+    try:
+        add_to_inventory(randomDictionary, "hurhur")
+        assert False
+    except KeyError:
+        assert True
+    else: 
+        return False #Return false if Error happens but its wrong error type
+
+
+
+
+
+#   -- -- --TESTING FOR adding_to_cart FUNCTION-- -- --   #
+
+#Error testing with wrong data type integer (should pass)
+def test_adding_to_cart_one():
+    try:
+        adding_to_cart(1, 2)
+        assert False
+    except TypeError:
+        assert True
+    else: 
+        return False #Return false if Error happens but its wrong error type
+
+#Error testing null parameters (should pass)
+def test_adding_to_cart_two():
+    try:
+        adding_to_cart(None, None)
+        assert False
+    except TypeError:
+        assert True
+    else: 
+        return False #Return false if Error happens but its wrong error type
+
+#Error testing with random dictionary (should pass)
+def test_adding_to_cart_three():
+    try:
+        adding_to_cart(randomDictionary, randomDictionary)
+        assert False
+    except TypeError:
+        assert True
+    else: 
+        return False #Return false if Error happens but its wrong error type
