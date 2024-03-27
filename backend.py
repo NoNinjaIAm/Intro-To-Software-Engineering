@@ -3,6 +3,7 @@ import time
 import datetime
 import sql_functions as sf
 import random
+import string
 import hashlib
 
 # important global variable
@@ -188,9 +189,17 @@ def register_account(password, email):
 
     user_id = check_used_ids(conn)
 
+    u = ""
+
+    for i in range(0,5):
+      u += random.choice(string.ascii_letters)
+
 
     # store data
-    sf.execute_statement(conn, f'INSERT INTO user (user_id, username, password_hash, email, first_name, last_name) VALUES ({user_id}, \'None\', \'{hashed_password}\', \'{email}\', \'None\', \'None\')')
+    sf.execute_statement(conn, f'INSERT INTO user (user_id, username, password_hash, email, first_name, last_name) VALUES ({user_id}, \'{u}\', \'{hashed_password}\', \'{email}\', \'None\', \'None\')')
+
+    current_user.username = f'\'{u}\''
+    current_user.user_id = user_id
 
     return False
 

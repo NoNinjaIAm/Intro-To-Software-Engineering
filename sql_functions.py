@@ -13,12 +13,14 @@ def execute_statement(connection, statement, fetch_results=True):
     try:
         cursor = connection.cursor()
         cursor.execute(statement)
+        result = None
 
         if fetch_results:
             result = cursor.fetchall()
             print(f"Statement executed successfully. Result: {result}")
 
         connection.commit()
+        return result
 
     except sqlite3.Error as e:
         print(f"Error executing statement: {e}")
