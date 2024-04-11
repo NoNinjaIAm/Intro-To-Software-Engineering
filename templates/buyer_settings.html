@@ -15,6 +15,8 @@
                 {% if not edit %}
                     <strong>Username:</strong> {{ data['username'] }}<br/>
                     <strong>Email Address:</strong> {{ data['email'] }}<br/>
+                    <strong>First Name:</strong> {{ data['fname'] }}<br/>
+                    <strong>Last Name:</strong> {{ data['lname'] }}<br/>
                     <address> 
                         <strong>Shipping Information:</strong><br/>
                         Street: {{ data['street'] }}<br/>
@@ -36,9 +38,12 @@
 
                         <strong>Username:</strong>
                         <br/><input type="text" name="new_uname" class="inputText" placeholder="New Username..."><br/>
-
                         <strong>Email Address:</strong>
-                        <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/><br/><br/>
+                        <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/>
+                        <strong>First Name:</strong>
+                        <br/><input type="text" name="new_fname" class="inputText" placeholder="New First Name..."><br/>
+                        <strong>Last Name:</strong>
+                        <br/><input type="text" name="new_lname" class="inputText" placeholder="New Last Name..."><br/><br/><br/>
 
 
                         <address> 
@@ -53,7 +58,6 @@
                         <address> 
                             <strong>Payment Information:</strong><br/>
                             Card Number: <br/><input type="text" name="new_card_num" class="inputText" placeholder="New Number..."><br/>
-
                             Card Holder Name: <br/><input type="text" name="new_cardholder_name" class="inputText" placeholder="New Name..."><br/>
                             Expiration Date: <br/><input type="text" name="new_date" class="inputText" placeholder="New Date..."><br/>
                         </address>
