@@ -1,0 +1,49 @@
+{% extends 'buyer_base.html' %}
+
+{% block title %}FRUHB || SEARCH{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+
+
+    <div style="padding: 1%;">
+        <h1>Fruhb Search</h1>
+        <form action="/search" method="POST">
+            <label for="search">Search for an product</label><br/>
+            <input type="text" name="query" placeholder="apple...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+
+    {% for item in list %}
+        <div>
+            <div>
+                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+            </div>
+            <div>
+                <p class="totalMoney">
+                    {{ item[0] }} <br/>
+                    Items in Stock: {{ item[1] }} <br/>
+                    Item Price: ${{ item[2] }} <br/>
+                </p>
+                <form class="addToCartForm" method="POST">
+                    <input class="addToCart" type="submit" name="action" value="Add to Cart">
+                    <input type="hidden" name="add" value="{{ item[3] }}">
+                </form>
+            </div>
+        </div>
+        <br/>
+        <br/>
+    {% endfor %}
+
+
+
+
+    <!-- footer -->
+    <address class="bottomContacts">
+        Contact Us!!!<br>
+        (123)-456-7890<br>
+        realEmailAddress@gmail.com<br>
+    </address>
+{% endblock %}

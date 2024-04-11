@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FRUHB || Login</title>
+
+        <!-- linking css page -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <script src="{{ url_for('static', filename='randomize.js') }}" defer></script>
+    </head>
+
+    <body>
+        <div class="topnav" style="text-align: center">
+            <br/>
+            <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
+            <br/><br/>
+        </div>
+
+
+        <form action="/login" method="POST">
+
+            <div class="container">
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username"  class="textbox">
+                
+                <select name="user_type" id="userType" required>
+                    <option value="1">Buyer</option>
+                    <option value="2">Seller</option>
+                </select>
+
+                <br/><br/>
+
+                <label for="password"><b>Password</b></label>
+                <input type="text" placeholder="Enter Password" name="password" class="textbox">
+
+                <br/><br/>
+                <button class="loginButton" type="submit" name="login">Login</button>
+                <button type="submit" name="registerAccount">Register</button>
+            </div>
+        </form>
+
+
+        {% if invalid_credentials %}
+            <p id="invalid_flag">Invalid login</p>
+        {% endif %}
+    </body>
+
+
+</html>

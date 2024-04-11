@@ -1,0 +1,93 @@
+{% extends 'seller_base.html' %}
+
+{% block title %}FRUHB || Settings{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    
+    
+
+
+    <div>
+        <ul>
+            <h1> Settings </h1>
+            <p> 
+                {% if not edit %}
+                    <strong>Username:</strong> {{ data['username'] }}<br/>
+                    <strong>Email Address:</strong> {{ data['email'] }}<br/>
+                    <address> 
+                        <strong>Shipping Information:</strong><br/>
+                        Street: {{ data['street'] }}<br/>
+                        State: {{ data['state'] }}<br/>
+                        City: {{ data['city'] }}<br/>
+                        ZIP: {{ data['zip'] }}<br/>
+                    </address>
+                    <address> 
+                        <strong>Payment Information:</strong><br/>
+                        Card Number: {{ data['cardNumber'] }}<br/>
+                        Card Holder Name: {{ data['cardholderName'] }}<br/>
+                        Expiration Date: {{ data['cardDate'] }}<br/>
+                    </address>
+                {% endif %}
+
+                {% if edit %}
+                    <form action="/settings" method="POST">
+
+
+                        <strong>Username:</strong>
+                        <br/><input type="text" name="new_uname" class="inputText" placeholder="New Username..."><br/>
+
+                        <strong>Email Address:</strong>
+                        <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/><br/><br/>
+
+
+                        <address> 
+                            <strong>Shipping Information:</strong><br/>
+                            Street: <br/><input type="text" name="new_street" class="inputText" placeholder="New Street..."><br/>
+                            State: <br/><input type="text" name="new_state" class="inputText" placeholder="New State..."><br/>
+                            City: <br/><input type="text" name="new_city" class="inputText" placeholder="New City..."><br/>
+                            ZIP: <br/><input type="text" name="new_zip" class="inputText" placeholder="New ZIP..."><br/>
+                        </address>
+                        <br/><br/>
+
+                        <address> 
+                            <strong>Payment Information:</strong><br/>
+                            Card Number: <br/><input type="text" name="new_card_num" class="inputText" placeholder="New Number..."><br/>
+
+                            Card Holder Name: <br/><input type="text" name="new_cardholder_name" class="inputText" placeholder="New Name..."><br/>
+                            Expiration Date: <br/><input type="text" name="new_date" class="inputText" placeholder="New Date..."><br/>
+                        </address>
+                        <br/>
+                        <input type="submit" name="new_info" value="Submit">
+
+                        <br/>
+                    </form>
+                {% endif %}
+            </p>
+
+            <form method='POST' action='/settings'>
+                <button type="submit" name="edit" class='settingsBut'>Edit Account Info</button>
+                <button type="submit" name="logout" class='settingsBut'>Log Out</button><br/><br/>
+                <button type="submit" name="deleteAccount" class="deleteAccountBut">DELETE ACCOUNT</button>
+            </form>
+
+            <br><br>
+            
+
+        </ul>
+
+        
+    </div>
+
+
+
+
+
+
+    <!-- footer -->
+    <address class="bottomContacts">
+        Contact Us!!!<br>
+        (123)-456-7890<br>
+        realEmailAddress@gmail.com<br>
+    </address>
+{% endblock %}
