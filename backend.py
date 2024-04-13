@@ -3,98 +3,98 @@ import sql_functions as sf
 import datetime
 
 class User:
-    def __init__(self, userID, username):
-      self.userID = userID
-      self.username = username
-      self.type = None
-      self.fname = None
-      self.lname = None
-      self.email = None
-      self.shippingData = None
-      self.paymentData = None
-      self.cart_ptr = None
+	def __init__(self, userID, username):
+		self.userID = userID
+		self.username = username
+		self.type = None
+		self.fname = None
+		self.lname = None
+		self.email = None
+		self.shippingData = None
+		self.paymentData = None
+		self.cart_ptr = None
 
-    def reset(self):
-    	self.userID = None
-    	self.username = None
-    	self.type = None
-    	self.fname = None
-    	self.lname = None
-    	self.email = None
-    	self.shippingData = None
-    	self.paymentData = None
-    	self.cart_ptr = None
+	def reset(self):
+		self.userID = None
+		self.username = None
+		self.type = None
+		self.fname = None
+		self.lname = None
+		self.email = None
+		self.shippingData = None
+		self.paymentData = None
+		self.cart_ptr = None
 
-    def update_database(self):
-    		if self.userID != None:
-	    		with sf.create_connection('database.db') as conn:
-	    			# user data
-	    			sf.execute_statement(conn, f'UPDATE user SET username=\'{self.username}\',fname=\'{self.fname}\',lname=\'{self.lname}\',email=\'{self.email}\' WHERE userID={self.userID}')
+	def update_database(self):
+			if self.userID != None:
+				with sf.create_connection('database.db') as conn:
+					# user data
+					sf.execute_statement(conn, f'UPDATE user SET username=\'{self.username}\',fname=\'{self.fname}\',lname=\'{self.lname}\',email=\'{self.email}\' WHERE userID={self.userID}')
 
-	    			# shipping data
-	    			street = self.shippingData['street']
-	    			city = self.shippingData['city']
-	    			state = self.shippingData['state']
-	    			zip = self.shippingData['zip']
-	    			sf.execute_statement(conn, f'UPDATE shippingInfo SET street=\'{street}\',city=\'{city}\',state=\'{state}\',zip=\'{zip}\' WHERE userID=\'{self.userID}\'')
+					# shipping data
+					street = self.shippingData['street']
+					city = self.shippingData['city']
+					state = self.shippingData['state']
+					zip = self.shippingData['zip']
+					sf.execute_statement(conn, f'UPDATE shippingInfo SET street=\'{street}\',city=\'{city}\',state=\'{state}\',zip=\'{zip}\' WHERE userID=\'{self.userID}\'')
 
-	    			# payment data
-	    			num = self.paymentData['cardNumber']
-	    			name = self.paymentData['cardholderName']
-	    			date = self.paymentData['cardDate']
-	    			sf.execute_statement(conn, f'UPDATE paymentInfo SET cardNumber=\'{num}\',cardholderName=\'{name}\',cardDate=\'{date}\' WHERE userID=\'{self.userID}\'')
-	    			sf.execute_statement(conn, f'UPDATE user SET cart_ptr={self.cart_ptr} WHERE userID=\'{self.userID}\'')
+					# payment data
+					num = self.paymentData['cardNumber']
+					name = self.paymentData['cardholderName']
+					date = self.paymentData['cardDate']
+					sf.execute_statement(conn, f'UPDATE paymentInfo SET cardNumber=\'{num}\',cardholderName=\'{name}\',cardDate=\'{date}\' WHERE userID=\'{self.userID}\'')
+					sf.execute_statement(conn, f'UPDATE user SET cart_ptr={self.cart_ptr} WHERE userID=\'{self.userID}\'')
 
-    def set_data(self):
-    		if self.userID != None:
-	    		with sf.create_connection('database.db') as conn:
-	    			# get user data
-	    			data = sf.execute_statement(conn, f'SELECT username, type, fname, lname, email, cart_ptr FROM user WHERE userID={self.userID}')[0]
-	    			self.username = data[0]
-	    			self.type = data[1]
-	    			self.fname = data[2]
-	    			self.lname = data[3]
-	    			self.email = data[4]
-	    			self.cart_ptr = data[5]
+	def set_data(self):
+			if self.userID != None:
+				with sf.create_connection('database.db') as conn:
+					# get user data
+					data = sf.execute_statement(conn, f'SELECT username, type, fname, lname, email, cart_ptr FROM user WHERE userID={self.userID}')[0]
+					self.username = data[0]
+					self.type = data[1]
+					self.fname = data[2]
+					self.lname = data[3]
+					self.email = data[4]
+					self.cart_ptr = data[5]
 
-	    			# get payment data
-	    			data = sf.execute_statement(conn, f'SELECT cardNumber, cardholderName, cardDate FROM paymentInfo WHERE userID={self.userID}')
-	    			
-	    			if data == []:
-	    				self.paymentData = {
-	    					'cardNumber': None,
-	    					'cardholderName': None,
-	    					'cardDate': None
-	    				}
-	    			else:
-	    				data = data[0]
-	    				self.paymentData = {
-	    					'cardNumber': data[0],
-	    					'cardholderName': data[1],
-	    					'cardDate': data[2]
-	    				}
+					# get payment data
+					data = sf.execute_statement(conn, f'SELECT cardNumber, cardholderName, cardDate FROM paymentInfo WHERE userID={self.userID}')
+					
+					if data == []:
+						self.paymentData = {
+							'cardNumber': None,
+							'cardholderName': None,
+							'cardDate': None
+						}
+					else:
+						data = data[0]
+						self.paymentData = {
+							'cardNumber': data[0],
+							'cardholderName': data[1],
+							'cardDate': data[2]
+						}
 
-	    			print(f'Payment data => {self.paymentData}')
-	    			# get shipping data
-	    			data = sf.execute_statement(conn, f'SELECT street, city, state, zip, country FROM shippingInfo WHERE userID={self.userID}')
+					print(f'Payment data => {self.paymentData}')
+					# get shipping data
+					data = sf.execute_statement(conn, f'SELECT street, city, state, zip, country FROM shippingInfo WHERE userID={self.userID}')
 
-	    			if data == []:
-	    				self.shippingData = {
-	    					'street': None,
-	    					'city': None,
-	    					'state': None,
-	    					'zip': None,
-	    					'country': None
-	    				}
-	    			else:
-	    				data = data[0]
-	    				self.shippingData = {
-	    					'street': data[0],
-	    					'city': data[1],
-	    					'state': data[2],
-	    					'zip': data[3],
-	    					'country': data[4]
-	    				}
+					if data == []:
+						self.shippingData = {
+							'street': None,
+							'city': None,
+							'state': None,
+							'zip': None,
+							'country': None
+						}
+					else:
+						data = data[0]
+						self.shippingData = {
+							'street': data[0],
+							'city': data[1],
+							'state': data[2],
+							'zip': data[3],
+							'country': data[4]
+						}
 
 
 
