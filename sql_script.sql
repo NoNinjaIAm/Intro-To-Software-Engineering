@@ -44,7 +44,7 @@ CREATE TABLE cart (
 CREATE TABLE paymentInfo (
     paymentID INT PRIMARY KEY,
     userID INT NOT NULL,
-    cardNumber INT VARCHAR(16) NULL,
+    cardNumber INT VARCHAR(16) NOT NULL,
     cardholderName VARCHAR(100) NOT NULL,
     cardDate DATE NOT NULL,
     FOREIGN KEY (userID) REFERENCES user(userID)
