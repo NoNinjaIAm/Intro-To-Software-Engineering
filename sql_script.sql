@@ -18,7 +18,7 @@ CREATE TABLE inventory (
     itemID INT PRIMARY KEY,
     userID INT NOT NULL,
     analyticsID INT NOT NULL,
-    itemName VARCHAR(20) NOT NULL
+    itemName VARCHAR(20) NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL (10,2) NOT NULL,
     FOREIGN KEY (userID) REFERENCES user(userID),
@@ -65,6 +65,7 @@ CREATE TABLE orders (
     orderID INT PRIMARY KEY,
     userID INT NOT NULL,
     itemID INT NOT NULL,
+    price INT NOT NULL,
     quantity INT NOT NULL,
     orderTime DATE NOT NULL,
     cardNumber INT VARCHAR(16) NULL,
