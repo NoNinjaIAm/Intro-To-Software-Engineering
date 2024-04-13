@@ -24,14 +24,14 @@
             </div>
             <div>
                 <p class="totalMoney">
-                    {{ item[0] }} <br/>
-                    Item Quantity: {{ item[1] }} <br/>
-                    Item Price: ${{ item[2] }} <br/>
+                    {{ item['itemName'] }} <br/>
+                    Item Quantity: {{ item['quantity'] }} <br/>
+                    Item Price: ${{ item['price'] }} <br/>
                 </p>
             </div>
 
             <form method="POST" class="editCartQuantity" action="/cart">
-                <input type="hidden" name="itemID" value="{{ item[3] }}">
+                <input type="hidden" name="itemID" value="{{ item['itemID'] }}">
                 <input class="addRemoveQuantity" name="action" type="submit" value='+'>
                 <input class="addRemoveQuantity" name="action" type="submit" value='-'>
             </form>

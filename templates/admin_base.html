@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Include your CSS and JavaScript files here -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- linking css page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+    <body>
+
+        <!-- Navigation Bar -->
+        <!-- nav bar -->
+        <div class="topnav">
+            <a class="homeButton" href="/">
+                <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
+            </a>
+
+            <a class="topButtons" href="/users">
+                <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
+            </a>
+        </div>
+        
+
+        <!-- Content Block -->
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+
+    </body>
+</html>
