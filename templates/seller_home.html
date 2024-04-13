@@ -1,0 +1,61 @@
+{% extends 'seller_base.html' %}
+
+{% block title %}FRUHB || HOME{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    
+    
+    <!-- printing out history -->
+    {% for item in productList %}
+      <div class="grid-container">
+        <h1>Order ID - {{ item['orderID'] }} </h1>
+        <div class="item1">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        
+        <div class="item2">
+            <p class="totalMoney">
+                Item Price: ${{ item['price'] }} <br/>
+                Total: ${{ item['price']*item['sold'] }}
+            </p>
+            <h2>
+                {{ item['sold'] }} - {{ item['name'] }}
+            </h2>
+            <form method="POST" action="/">
+                <button name="removeItem" type="submit" value="{{ item['itemID'] }}">Remove Item</button>
+            </form>
+        </div>  
+      </div>  
+    {% endfor %}
+
+
+
+    <form method="POST" action="/" style="opacity:0.65;">
+        <div class="grid-container">
+            <div class="item1">
+                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+            </div>
+            
+            <div class="item2" style="text-align: right;">
+                <p class="totalMoney">
+                    Item Price: $ <input type="text" name="new_price"> <br/>
+                    Amount: $ <input type="text" name="new_amount"><br/>
+                    Item Name: <input type="text" name="item_name"><br/>
+                </p>
+
+                <input class="addRemoveQuantity" name="addToInventory" type="submit" value='Add Item'>
+            </div>
+        </div> 
+    </form>  
+
+
+
+
+    <!-- footer -->
+    <address class="bottomContacts">
+        Contact Us!!!<br>
+        (123)-456-7890<br>
+        realEmailAddress@gmail.com<br>
+    </address>
+{% endblock %}

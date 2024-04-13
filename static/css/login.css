@@ -65,3 +65,14 @@ span.psw {
     }
 }
 
+div#error-message {
+    border: black 2px solid;
+    border-radius: 4%;
+    padding: 1%;
+    margin-left: 5%;
+    height: 10%;
+    width: 10%;
+    text-align: center;
+    background: white;
+    color: red;
+}

@@ -1,0 +1,72 @@
+{% extends 'buyer_base.html' %}
+
+{% block title %}FRUHB || HOME{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <script src="{{ url_for('static', filename='randomize.js') }}" defer></script>
+    <!-- Add home page content here -->
+
+
+    <!-- Buzz word stuff-->
+    <div class="buzzWordRow">
+        <p class="buzzWord" id="randSpin1">Big Savings! </p>
+        <p class="buzzWord" id="randSpin2">Yummy Produce!</p>
+        <p class="buzzWord" id="randSpin3">Free Shipping!</p>
+        <p class="buzzWord" id="randSpin4">Great Staff!</p>
+        <p class="buzzWord" id="randSpin5">Fast Delivery!</p>
+    </div>
+
+
+    <h1 class="item1">Featured Fruits!!!</h1>
+    {% for item in fruits %}
+        <div>
+            <div>
+                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+            </div>
+            <div>
+                <p class="totalMoney">
+                    {{ item['name'] }} <br/>
+                    Item Price: ${{ item['price'] }} <br/>
+                </p>
+                <form class="addToCartForm" method="POST">
+                    <input class="addToCart" type="submit" name="action" value="Add to Cart">
+                    <input type="hidden" name="add" value="{{ item['itemID'] }}">
+                </form>
+            </div>
+        </div>
+        <br/>
+        <br/>
+    {% endfor %}
+
+    <h1 class="item1">Featured Veggies!!!</h1>
+    {% for item in veggies %}
+        <div>
+            <div>
+                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+            </div>
+            <div>
+                <p class="totalMoney">
+                    {{ item['name'] }} <br/>
+                    Item Price: ${{ item[price] }} <br/>
+                </p>
+                <form class="addToCartForm" method="POST">
+                    <input class="addToCart" type="submit" name="action" value="Add to Cart">
+                    <input type="hidden" name="add" value="{{ item['itemID'] }}">
+                </form>
+            </div>
+        </div>
+        <br/>
+        <br/>
+    {% endfor %}
+
+
+
+
+    <!-- footer -->
+    <address class="bottomContacts">
+        Contact Us!!!<br>
+        (123)-456-7890<br>
+        realEmailAddress@gmail.com<br>
+    </address>
+{% endblock %}

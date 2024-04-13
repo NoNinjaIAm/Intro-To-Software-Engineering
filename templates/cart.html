@@ -1,78 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRUHB || Cart</title>
+{% extends 'buyer_base.html' %}
 
-        <!-- linking css page -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-</head>
-<body>
-    <!-- nav bar -->
-    <div class="topnav">
-        <a class="homeButton" href="/">
-            <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
-        </a>
+{% block title %}FRUHB || CART{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <script src="{{ url_for('static', filename='randomize.js') }}" defer></script>
+    <!-- Add home page content here -->
 
 
-        <form>
-            <input class="searchBar" type="text" placeholder="Search..">
-            <button class="searchButton" type="submit">Submit</button>
-        </form>
+   
+    {% if list | length == 0 %}
+        <p id="empty_cart">
+            No items in cart
+        </p>
+    {% endif %}
 
 
-        <a class="topButtons" href="/order-history">
-            <img src="{{ url_for('static', filename='images/orderHistoryIcon.png') }}" alt="Order History" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/cart">
-            <img src="{{ url_for('static', filename='images/cartIcon.png') }}" alt="Cart" height="90px" width="90px">
-        </a>
-        
-        <a class="topButtons" href="/settings">
-            <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
-        </a>
 
-        <a class="profileButton" href="/login">
-            <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Profile" height="90px" width="175px">
-        </a>
-    </div>
+    {% for item in list %}
+        <div>
+            <div>
+                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+            </div>
+            <div>
+                <p class="totalMoney">
+                    {{ item[0] }} <br/>
+                    Item Quantity: {{ item[1] }} <br/>
+                    Item Price: ${{ item[2] }} <br/>
+                </p>
+            </div>
 
-
-    <div class="grid-container">
-        
-        <div class="item1">
-            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
-        </div>
-        
-        <div class="item2">
-            <p class="totalMoney">
-                Total: $0.00
-            </p>
-            <h2>
-                Fruit Name [Quanitity]
-            </h2>
-            <p>
-                Item Description
-            </p>
-            <form class="editCartQuantity" action="/">
-                <button class="addRemoveQuantity" type="AddToQuantity">+</button>
-                <button class="addRemoveQuantity" type="RemoveFromQuantity">-</button>
+            <form method="POST" class="editCartQuantity" action="/cart">
+                <input type="hidden" name="itemID" value="{{ item[3] }}">
+                <input class="addRemoveQuantity" name="action" type="submit" value='+'>
+                <input class="addRemoveQuantity" name="action" type="submit" value='-'>
             </form>
-        </div>  
+        </div>
+        <br/>
+    {% endfor %}
 
-        </div> 
-    </div>
+    {% if cartPrice %}
+    <p>
+        Cart Price: ${{ cartPrice }}
 
-    <div>
-        <h1>
-            Total Payment: $0.00
-        </h1>
-        
-        <button class="proceedPayment" type="ProceedToPayment">Proceed To Payment</button>
-    </div>
+        <form method="POST" action="/cart">
+            <input type="submit" name="payButton" value="Pay">
+        </form>
+    </p>
+    {% endif %}
 
-</body>
-</html>
+    {% if bool %}
+
+        <p>You have paid!</p>
+
+    {% endif %}
+{% endblock %}
