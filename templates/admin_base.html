@@ -18,11 +18,23 @@
                 <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
             </a>
 
+            
+            <a class="topButtons" href="/inventory">
+                <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Inventory" height="90px" width="90px">
+            </a>
             <a class="topButtons" href="/users">
-                <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Settings" height="90px" width="90px">
+                <img src="{{ url_for('static', filename='images/settingsIcon.png') }}" alt="Users" height="90px" width="90px">
             </a>
         </div>
         
+        <div style="padding: 1%;">
+        <h1>Fruhb Search</h1>
+            <form method="POST">
+                <label for="search">Search</label><br/>
+                <input type="text" name="query" placeholder="...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
 
         <!-- Content Block -->
         <div class="content">

@@ -7,7 +7,7 @@
     
     
     <!-- printing out history -->
-    {% for item in userList %}
+    {% for item in itemList %}
       <div class="grid-container">
         <div class="item1">
             <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
@@ -15,21 +15,21 @@
         
         <div class="item2">
             <p class="totalMoney">
-                Username: {{ item['username'] }}<br/>
-                Email: ${{ item['email'] }} <br/>
+                Seller: {{ item['username'] }} <br/>
+                Item Name: {{ item['itemName'] }}<br/>
+                Item Price: ${{ item['price'] }} <br/>
+                Item Quantity: {{ item['quantity'] }} <br/>
+                Items Sold: {{ item['sold'] }} <br/>
             </p>
             <h2>
                 {{ item['type'] }}
             </h2>
             <form method="POST">
-                <button name="blockUser" type="submit" value="{{ item['userID'] }}">Block User</button>
+                <button name="blockItem" type="submit" value="{{ item['itemID'] }}">Block Item</button>
             </form>
         </div>  
       </div>  
     {% endfor %}
-
-
-
 
 
 
