@@ -267,6 +267,61 @@ def search_inventory(item):
 		results = sf.execute_statement(conn, f'SELECT itemName,quantity,price,itemID FROM inventory WHERE itemName LIKE \'%{item}%\'')
 		return results
 
+def admin_inventory_search(item):
+	with sf.create_connection('database.db') as conn:
+		results = sf.execute_statement(conn, f'SELECT itemName,quantity,price,itemID,userID FROM inventory WHERE itemName LIKE \'%{item}%\'')
+		uname = ""
+		if results == []:
+			return []
+		else:
+			uname = results[0][4]
+
+		data = []
+		for item in results:
+			username = sf.execute_statement(conn, f'SELECT username FROM user WHERE userID={uname}')
+			if username == []:
+				return []
+			else:
+				username = username[0][0]
+
+			itemID = item[3]
+			sold = sf.execute_statement(conn, f'SELECT quantitySold FROM analytics WHERE itemID={itemID}')
+			if sold == []:
+				return []
+			else:
+				sold = sold[0][0]
+
+
+
+			temp = {
+			'itemName': item[0],
+			'quantity': item[1],
+			'price': item[2],
+			'sold': sold,
+			'itemID': itemID,
+			'username': username
+			}
+			data.append(temp)
+
+		return data
+
+def search_users(username):
+	with sf.create_connection('database.db') as conn:
+		results = sf.execute_statement(conn, f'SELECT userID, username, email, type FROM user WHERE username LIKE \'%{username}%\'')
+
+		data = []
+		for account in results:
+			temp = {
+			'userID': account[0],
+			'username': account[1],
+			'email': account[2],
+			'type': account[3]
+			}
+			data.append(temp)
+
+		return data
+
+
 def get_cart(user):
 	user.from_db_to_class_cart()
 	returnCart = []
@@ -417,6 +472,9 @@ def home_page():
 
 		current_user.from_db_to_class_cart()
 		return render_template('buyer_home.html', fruits=fruitData, veggies=veggieData)
+	elif current_user.type == 2:
+		print("admin portal")
+		return redirect(url_for('admin_user'))
 	else: 
 		return redirect(url_for('login_page'))
 
@@ -464,7 +522,6 @@ def login_page():
 
 	return render_template('login.html')
 
-
 # done
 @web_app.route("/register", methods=["GET", "POST"])
 def register_page():
@@ -502,8 +559,6 @@ def register_page():
 
 		return redirect(url_for('login_page'))
 	return render_template('register.html')
-
-
 
 # done
 @web_app.route("/settings", methods=["GET", "POST"])
@@ -573,7 +628,6 @@ def settings_page():
 	else: 
 		return redirect(url_for('login_page'))
 
-
 # done
 @web_app.route("/search", methods=["GET", "POST"])
 def search_page():
@@ -601,7 +655,6 @@ def search_page():
 			return render_template('search.html')
 	else:
 		return redirect(url_for('login_page'))
-
 
 # done
 @web_app.route("/cart", methods=["GET", "POST"])
@@ -776,6 +829,65 @@ def order_history_page():
 		return redirect(url_for('login_page'))
 
 
+
+# done
+@web_app.route("/users", methods=["GET","POST"])
+def admin_user():
+	if current_user.type == 3:
+		query = ""
+		if request.method == "POST":
+			if 'query' in request.form:
+				query = request.form['query']
+
+			if 'blockUser' in request.form:
+				print('user to block =>', request.form['blockUser'])
+
+				with sf.create_connection('database.db') as conn:
+					userID = int(request.form['blockUser'])
+					sf.execute_statement(conn, f'DELETE FROM cart WHERE userID={userID}')
+					sf.execute_statement(conn, f'DELETE FROM user WHERE userID={userID}')
+					sf.execute_statement(conn, f'DELETE FROM inventory WHERE userID={userID}')
+					sf.execute_statement(conn, f'DELETE FROM orders WHERE userID={userID}')
+					sf.execute_statement(conn, f'DELETE FROM paymentInfo WHERE userID={userID}')
+					sf.execute_statement(conn, f'DELETE FROM shippingInfo WHERE userID={userID}')
+
+
+		# reuse search_inventory to find users based on search
+		users = search_users(query)
+
+		# default search is all users
+		return render_template('admin_user.html', userList=users)
+	else:
+		return redirect(url_for('login_page'))
+
+# done
+@web_app.route("/inventory", methods=["GET","POST"])
+def admin_inventory():
+	if current_user.type == 3:
+		query = ""
+		if request.method == "POST":
+			if 'query' in request.form:
+				query = request.form['query']
+
+			if 'blockItem' in request.form:
+				print('item to block =>', request.form['blockItem'])
+
+				with sf.create_connection('database.db') as conn:
+					itemID = int(request.form['blockItem'])
+					sf.execute_statement(conn, f'DELETE FROM cart WHERE itemID={itemID}')
+					sf.execute_statement(conn, f'DELETE FROM inventory WHERE itemID={itemID}')
+					sf.execute_statement(conn, f'DELETE FROM orders WHERE itemID={itemID}')
+					sf.execute_statement(conn, f'DELETE FROM featured WHERE itemID={itemID}')
+					sf.execute_statement(conn, f'DELETE FROM analytics WHERE itemID={itemID}')
+
+
+		# reuse search_inventory to find users based on search
+		items = admin_inventory_search(query)
+
+		# default search is all users
+		return render_template('admin_inventory.html', itemList=items)
+	else:
+		return redirect(url_for('login_page'))
 
 
 if __name__ == '__main__':
