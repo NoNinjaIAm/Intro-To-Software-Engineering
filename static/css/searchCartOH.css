@@ -1,0 +1,99 @@
+/*Search and Cart and Order History*/
+body {
+    background-color: #ece0a6;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.displayImage { grid-area: image; padding: 0; text-align: center;}
+.displayDesc { grid-area: desc; padding: 1%; text-align: left;}
+.grid-container {
+    display: grid;
+    grid-template-areas:
+    'image desc desc';
+    background-color: #ab3735;
+    padding: 1.5%;
+    gap: 1%;
+    margin: 3% 10%;
+    width: 70%;
+}
+
+.grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.totalMoney {
+    font-size: 20px;
+}
+
+.headerSection {
+    background-color: #bda470;;
+    overflow: hidden;
+    float: left;
+    text-align: center;
+    margin-bottom: 10px;
+    width: 100%;
+    display: inline;
+    padding: 1%;
+}
+
+.headerWords {
+    flex: content;
+    color: white;
+    font-size: 65px;
+}
+
+/*Search Unique*/
+.searchBar {
+   width: 50%;
+   height: 30px;
+}
+
+.addToCart {
+    background-color:#ab3735;
+    color: white;
+}
+
+
+/*Cart Unique*/
+.addRemoveQuantity {
+    background-color:#ab3735;
+    color: white;
+}
+
+#empty_cart {
+    background-color: white;
+    font-size: 325%;
+    padding: 2%;
+    width: 50%;
+    margin: 5%;
+    border-radius: 3%;
+    border: solid black 3px;
+}
+
+
+/*OH Unique*/
+.styleBut {
+    background-color:#ab3735;
+    color: white;
+}
+
+.payBut {
+    float: right;
+    margin: 10px;
+    background-color:#0dbcdf;
+    color: white;
+    border-color: #0d65b6;
+    height: 60px;
+    width: 175px;
+    font-size: 30px;
+}
+
+.payBut:hover {
+    background-color: #b7d5d7;
+    border-color: white;
+    color: white;
+    
+}

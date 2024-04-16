@@ -1,0 +1,20 @@
+/*Users*/ 
+.item1 { grid-area: item1;}
+.item2 { grid-area: item2;}
+.item3 { grid-area: item3;}
+.item4 { grid-area: item4; margin-top: 15px;}
+.grid-container {
+    display: grid;
+    grid-template-areas:
+    'item1 item2 item3 item4 space space';
+    background-color: #ffffff;
+    padding: 0%;
+    gap: 1%;
+    margin: 4% 6% 4% 6%;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: grey;
+}
+
+
+/*Inventory*/

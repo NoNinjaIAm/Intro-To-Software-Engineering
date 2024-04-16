@@ -32,14 +32,25 @@ body {
     margin: 0;
 }
 
-.searchBar {
-    float: left;
-    width: 30%;
-    height: 40px;
-    margin: 30px 10px;
-}
-
 .searchButton {
     float: left;
     margin: 40px 0;
 }
+
+/* Bottom Bar */
+.bottomContacts {
+    background-color: #517c58;
+    position:fixed;
+    padding: 10px;
+    color: rgb(164, 217, 234);
+    bottom: 0;
+    width: 100%;
+    }
+    
+    
+    hr {
+        width: 50%;
+        border: solid black 1px;
+    }
+
+
