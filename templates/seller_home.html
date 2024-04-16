@@ -2,52 +2,57 @@
 
 {% block title %}FRUHB || HOME{% endblock %}
 
+
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sellerHome.css') }}">
     
-    
+    <h1 style="text-align: center; color: rgb(109, 9, 9); border-style: double; border-color: rgb(109, 9, 9); margin: 20px 100px;">Items in Inventory:</h1>
     <!-- printing out history -->
     {% for item in productList %}
-      <div class="grid-container">
-        <h1>Order ID - {{ item['orderID'] }} </h1>
+      <div class="grid-container1">
         <div class="item1">
             <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
         </div>
         
         <div class="item2">
-            <p class="totalMoney">
-                Item Price: ${{ item['price'] }} <br/>
-                Total: ${{ item['price']*item['sold'] }}
-            </p>
-            <h2>
-                {{ item['sold'] }} - {{ item['name'] }}
-            </h2>
+            <h2>{{ item['name'] }}</h2>
+            <h3>Amount Sold: {{ item['sold'] }}</h3>
             <form method="POST" action="/">
-                <button name="removeItem" type="submit" value="{{ item['itemID'] }}">Remove Item</button>
+                <button class="rmButton" name="removeItem" type="submit" value="{{ item['itemID'] }}">Remove Item</button>
             </form>
         </div>  
+        <div class="item3">
+            <p class="totalMoney">
+                Item Price: ${{ item['price'] }} <br/>
+                Total Earned From Sales: ${{ item['price']*item['sold'] }}
+            </p>
+            <p>Order ID - {{ item['orderID'] }}</p>
+        </div>
       </div>  
     {% endfor %}
 
 
-
-    <form method="POST" action="/" style="opacity:0.65;">
-        <div class="grid-container">
+    <h1 style="text-align: center; color: rgb(109, 9, 9); border-style: double; border-color: rgb(109, 9, 9); margin: 20px 100px;">Add Item:</h1>
+    <form method="POST" action="/">
+        <div class="grid-container2">
             <div class="item1">
                 <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
             </div>
             
-            <div class="item2" style="text-align: right;">
+            <div class="item3">
                 <p class="totalMoney">
+                    Item Name: <input type="text" name="item_name"><br/>
                     Item Price: $ <input type="text" name="new_price"> <br/>
                     Amount: $ <input type="text" name="new_amount"><br/>
-                    Item Name: <input type="text" name="item_name"><br/>
                 </p>
 
                 <input class="addRemoveQuantity" name="addToInventory" type="submit" value='Add Item'>
             </div>
         </div> 
     </form>  
+<!-- Space for fixed bottom bar-->
+</br></br></br></br>
+
 
 
 

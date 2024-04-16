@@ -3,27 +3,28 @@
 {% block title %}FRUHB || SEARCH{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/searchCartOH.css') }}">
 
 
-    <div style="padding: 1%;">
-        <h1>Fruhb Search</h1>
+    <div class="headerSection">
+        <h1 class="headerWords">Search:</h1>
         <form action="/search" method="POST">
-            <label for="search">Search for an product</label><br/>
-            <input type="text" name="query" placeholder="apple...">
-            <button type="submit">Search</button>
+            <label for="search"></label><br/>
+            <input class="searchBar" type="text" name="query" placeholder="apple...">
+            <button style="height:30px" type="submit">Search</button>
         </form>
     </div>
 
 
     {% for item in list %}
-        <div>
-            <div>
+        <div class="grid-container">
+            <div class="displayImage">
                 <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
             </div>
-            <div>
+            <div class="displayDesc">
                 <p class="totalMoney">
-                    {{ item[0] }} <br/>
+                    <strong style="font-size: 30px;">{{ item[0] }}</strong><br/>
                     Items in Stock: {{ item[1] }} <br/>
                     Item Price: ${{ item[2] }} <br/>
                 </p>

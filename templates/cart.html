@@ -3,48 +3,59 @@
 {% block title %}FRUHB || CART{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/searchCartOH.css') }}">
     <script src="{{ url_for('static', filename='randomize.js') }}" defer></script>
     <!-- Add home page content here -->
 
+    <div class="headerSection">
+        <h1 class="headerWords">Your Cart:</h1>
+    </div>
 
-   
+    <!-- If Cart is Empty -->
     {% if list | length == 0 %}
-        <p id="empty_cart">
+        <p style="font-size: 50px; color: red;" id="empty_cart">
             No items in cart
         </p>
     {% endif %}
 
-
-
+    <!-- Displaying Items in Cart-->
     {% for item in list %}
-        <div>
-            <div>
+        <div class="grid-container">
+            <div class="displayImage">
                 <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
             </div>
-            <div>
+            <div class="displayDesc">
                 <p class="totalMoney">
-                    {{ item['itemName'] }} <br/>
-                    Item Quantity: {{ item['quantity'] }} <br/>
-                    Item Price: ${{ item['price'] }} <br/>
+                    <strong style="font-size: 30px;">{{ item['itemName'] }}</strong> <br/><br/>
+                    Price: ${{ item['price'] }} <br/>
+                    <div>
+                        Quantity: {{ item['quantity'] }}
+                        <form method="POST" class="editCartQuantity" action="/cart">
+                            <input type="hidden" name="itemID" value="{{ item['itemID'] }}">
+                            <input class="addRemoveQuantity" name="action" type="submit" value='+'>
+                            <input class="addRemoveQuantity" name="action" type="submit" value='-'>
+                        </form>
+                    </div>
+                    </br>
+                    <div style="text-align: right;">
+                        <strong>Total:</strong>  ${{ item['price'] *  item['quantity']}}
+                    </div>
+                    
                 </p>
-            </div>
+            
 
-            <form method="POST" class="editCartQuantity" action="/cart">
-                <input type="hidden" name="itemID" value="{{ item['itemID'] }}">
-                <input class="addRemoveQuantity" name="action" type="submit" value='+'>
-                <input class="addRemoveQuantity" name="action" type="submit" value='-'>
-            </form>
+                
+            </div>
         </div>
         <br/>
     {% endfor %}
 
     {% if cartPrice %}
-    <p>
-        Cart Price: ${{ cartPrice }}
+    
+        <h2 style="text-align: right; font-size: 30px; margin: 0 30px">Grand Total: ${{ cartPrice }}</h2>
 
         <form method="POST" action="/cart">
-            <input type="submit" name="payButton" value="Pay">
+            <input class="payBut" type="submit" name="payButton" value="Pay">
         </form>
     </p>
     {% endif %}
@@ -54,4 +65,11 @@
         <p>You have paid!</p>
 
     {% endif %}
+
+    <!-- footer -->
+<address class="bottomContacts">
+    Contact Us!!!<br>
+    (123)-456-7890<br>
+    realEmailAddress@gmail.com<br>
+</address>
 {% endblock %}

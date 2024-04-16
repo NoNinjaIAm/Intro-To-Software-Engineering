@@ -7,7 +7,7 @@
         <title>FRUHB || Login</title>
 
         <!-- linking css page -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
         <script src="{{ url_for('static', filename='randomize.js') }}" defer></script>
     </head>
@@ -19,33 +19,32 @@
             <br/><br/>
         </div>
 
+        <div class="bigContainer">
+            <h1>Login To Account</h1>
+            <form action="/login" method="POST">
 
-        <form action="/login" method="POST">
+                <div class="container">
+                    <label for="username"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="username"  class="textbox">
+                    
+                    <select name="user_type" id="userType" required>
+                        <option value="1">Buyer</option>
+                        <option value="2">Seller</option>
+                    </select>
+    
+                    <br/><br/>
+    
+                    <label for="password"><b>Password</b></label>
+                    <input type="text" placeholder="Enter Password" name="password" class="textbox">
+    
+                    <br/><br/>
+                    <button class="loginButton" type="submit" name="login">Login</button>
+                    <button type="submit" name="registerAccount">Register</button>
+                </div>
+            </form>
+        </div>
 
-            <div class="container">
-                <label for="username"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="username"  class="textbox">
-                
-                <select name="user_type" id="userType" required>
-                    <option value="1">Buyer</option>
-                    <option value="2">Seller</option>
-                </select>
-
-                <br/><br/>
-
-                <label for="password"><b>Password</b></label>
-                <input type="text" placeholder="Enter Password" name="password" class="textbox">
-
-                <br/><br/>
-                <button class="loginButton" type="submit" name="login">Login</button>
-                <button type="submit" name="registerAccount">Register</button>
-            </div>
-        </form>
-
-
-        {% if invalid_credentials %}
-            <p id="invalid_flag">Invalid login</p>
-        {% endif %}
+        
     </body>
 
 

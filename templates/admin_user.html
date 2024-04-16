@@ -3,30 +3,35 @@
 {% block title %}FRUHB || Inventory{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     
     
     <!-- printing out history -->
     {% for item in userList %}
       <div class="grid-container">
-        <div class="item1">
+        <!--<div class="item1">
             <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
-        </div>
+        </div>-->
         
+        <div class="item1">
+            <p class="totalMoney">Username: {{ item['username'] }}</p>
+        </div> 
         <div class="item2">
-            <p class="totalMoney">
-                Username: {{ item['username'] }}<br/>
-                Email: ${{ item['email'] }} <br/>
-            </p>
-            <h2>
-                {{ item['type'] }}
-            </h2>
+            <p class="totalMoney">Email: {{ item['email'] }}</p>
+        </div>
+        <div class="item3">
+            <p class="totalMoney">Account Type: {{ item['type'] }}</p>
+        </div>
+        <div class="item4">
             <form method="POST">
                 <button name="blockUser" type="submit" value="{{ item['userID'] }}">Block User</button>
             </form>
+        </div> 
+            
         </div>  
       </div>  
     {% endfor %}
+    </br></br></br>
 
 
 
