@@ -1,0 +1,34 @@
+version: 2.1
+orbs:
+  python: circleci/python@2.0.3
+
+jobs:
+  build: 
+    working_directory: ~/SE-GROUP10
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      
+
+  test:
+    working_directory: ~/SE-GROUP10
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      # Replace this with a real test runner invocation
+      - python/install-packages:
+          pkg-manager: pip
+      - run: pip install selenium
+      - run:
+          name: Run tests
+          command: python User_Story_Testing/User_Story_1.py
+
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
