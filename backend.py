@@ -472,7 +472,7 @@ def home_page():
 
 		current_user.from_db_to_class_cart()
 		return render_template('buyer_home.html', fruits=fruitData, veggies=veggieData)
-	elif current_user.type == 2:
+	elif current_user.type == 3:
 		print("admin portal")
 		return redirect(url_for('admin_user'))
 	else: 

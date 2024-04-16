@@ -1,0 +1,59 @@
+user
+- userID
+- fname
+- lname
+- email
+- username
+- password
+- type
+- shipping_ptr
+- payment_ptr
+- cart_ptr
+
+inventory 
+- itemID
+- userID (seller)
+- analyticsID 
+- quantity
+- price
+
+analytics
+- dataID
+- itemID
+- quantitySold
+
+cart
+- cartID
+- userID
+- itemID
+- quatity
+
+orders
+- orderID
+- userID
+- itemID
+- quantity
+- shippingInformation
+- paymentInformation
+- time_ordered
+- delivered
+
+paymentInfo
+- paymentID
+- userID
+- cardNumber
+- cardholderName
+- cardDate
+
+shippingInfo
+- shippingID
+- streetAddress
+- city
+- state
+- zip
+- country
+
+featured
+- featureID
+- itemID
+- type
