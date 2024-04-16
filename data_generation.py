@@ -91,7 +91,7 @@ def generate_analytics():
         quantitySold = random.randint(0, 1000)
 		
         sf.execute_statement(conn, f"""
-            INSERT INTO inventory
+            INSERT INTO analytics
             (dataID, itemID, quantitySold)
             VALUES ({dataID}, {itemID}, {quantitySold});
             """, fetch_results=False)
@@ -201,12 +201,3 @@ def generate_featured(type=random.randint(0,1)):
             (featuredID, itemID, type)
             VALUES ({featuredID}, {itemID}, {type});
             """, fetch_results=False)
-
-generate_user()
-generate_item()
-generate_analytics()
-generate_cart()
-generate_payment_info()
-generate_shipping_info()
-generate_order()
-generate_featured()
