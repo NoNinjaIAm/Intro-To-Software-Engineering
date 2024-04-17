@@ -1,29 +1,18 @@
 version: 2.1
+orbs:
+  python: circleci/python@2.0.3
 jobs:
-  build: 
-    working_directory: ~/SE-GROUP10
+  build-and-test:
     docker:
-      - image: "circleci/python:3.6.4"
+      - image: cimg/python:3.10.4
     steps:
       - checkout
-      
-
-  test:
-    working_directory: ~/SE-GROUP10
-    docker:
-      - image: "circleci/python:3.6.4"
-    steps:
-      - checkout
-      # Replace this with a real test runner invocation
-      - run: python -m pip install pytest
+      - python/install-packages:
+          pkg-manager: pip
       - run:
           name: Run tests
-          command: python -m pytest
-
+          command: pytest
 workflows:
-  build_and_test:
+  sample:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - build-and-test
