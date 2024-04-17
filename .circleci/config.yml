@@ -20,10 +20,9 @@ jobs:
       # Replace this with a real test runner invocation
       - python/install-packages:
           pkg-manager: pip
-      - run: pip install selenium
       - run:
           name: Run tests
-          command: python User_Story_Testing/User_Story_1.py
+          command: python -m pytest
 
 workflows:
   build_and_test:
