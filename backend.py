@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort
 import sql_functions as sf
 import time
+import re
 
 
 def new_id(tableID, table):
@@ -264,10 +265,16 @@ class User:
 
 def search_inventory(item):
 	with sf.create_connection('database.db') as conn:
+		if "FROM" in item.upper() or "CREATE" in item.upper() or "DROP" in item.upper() or "INTO" in item.upper() or "WHERE" in item.upper():
+			return None
+
 		results = sf.execute_statement(conn, f'SELECT itemName,quantity,price,itemID FROM inventory WHERE itemName LIKE \'%{item}%\'')
 		return results
 
+
 def admin_inventory_search(item):
+	if "FROM" in item.upper() or "CREATE" in item.upper() or "DROP" in item.upper() or "INTO" in item.upper() or "WHERE" in item.upper():
+		return None
 	with sf.create_connection('database.db') as conn:
 		results = sf.execute_statement(conn, f'SELECT itemName,quantity,price,itemID,userID FROM inventory WHERE itemName LIKE \'%{item}%\'')
 		uname = ""
@@ -305,7 +312,10 @@ def admin_inventory_search(item):
 
 		return data
 
+
 def search_users(username):
+	if "FROM" in username.upper() or "CREATE" in username.upper() or "DROP" in username.upper() or "INTO" in username.upper() or "WHERE" in username.upper():
+		return []
 	with sf.create_connection('database.db') as conn:
 		results = sf.execute_statement(conn, f'SELECT userID, username, email, type FROM user WHERE username LIKE \'%{username}%\'')
 
@@ -346,7 +356,16 @@ def get_cart(user):
 	return returnCart,total
 
 
+def general_sanitize(string):
+	if "FROM" in string.upper() or "CREATE" in string.upper() or "DROP" in string.upper() or "INTO" in string.upper() or "WHERE" in string.upper():
+		return None
+	else:
+		return string
 
+
+def is_valid(pattern, text):
+	matches = re.findall(pattern, text)
+	return bool(matches)
 
 web_app = Flask(__name__)
 current_user = User(None, None)
@@ -472,11 +491,12 @@ def home_page():
 
 		current_user.from_db_to_class_cart()
 		return render_template('buyer_home.html', fruits=fruitData, veggies=veggieData)
-	elif current_user.type == 3:
+	elif current_user.type == 2:
 		print("admin portal")
 		return redirect(url_for('admin_user'))
 	else: 
 		return redirect(url_for('login_page'))
+
 
 # done
 @web_app.route("/login", methods=["GET", "POST"])
@@ -486,6 +506,11 @@ def login_page():
 			# gather credentials
 			psw = request.form['password']
 			uname = request.form['username']
+
+
+			# sanitizing
+			psw = general_sanitize(psw)
+			uname = general_sanitize(uname)
 
 			# getting credentials to match against
 			credentials = None
@@ -522,15 +547,26 @@ def login_page():
 
 	return render_template('login.html')
 
+
 # done
 @web_app.route("/register", methods=["GET", "POST"])
 def register_page():
 	if request.method == "POST":
-		new_email = request.form["email"]
-		new_uname = request.form["uname"]
-		new_psw = request.form["psw"]
-		psw_repeat = request.form["psw-repeat"]
-		user_type = request.form["user_type"]
+		new_email = general_sanitize(request.form["email"])
+		new_uname = general_sanitize(request.form["uname"])
+		new_psw = general_sanitize(request.form["psw"])
+		psw_repeat = general_sanitize(request.form["psw-repeat"])
+		user_type = general_sanitize(request.form["user_type"])
+
+
+		
+		if not is_valid(new_email, r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'): return render_template('register.html', incorrect=True) 
+		if not is_valid(new_uname, r'^[a-zA-Z0-9_-]{3,20}$'): return render_template('register.html', incorrect=True)
+		if not is_valid(new_psw, r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$'): return render_template('register.html', incorrect=True)
+
+
+
+
 
 		uname_filter = None
 		with sf.create_connection('database.db') as conn:
@@ -560,6 +596,7 @@ def register_page():
 		return redirect(url_for('login_page'))
 	return render_template('register.html')
 
+
 # done
 @web_app.route("/settings", methods=["GET", "POST"])
 def settings_page():
@@ -576,20 +613,31 @@ def settings_page():
 				return redirect(url_for("login_page"))
 
 			if 'new_info' in request.form:
-				if request.form['new_uname']: current_user.username = request.form['new_uname']
-				if request.form['new_email']: current_user.email = request.form['new_email']
+				if request.form['new_uname'] and not is_valid(request.form['new_uname'], r'^[a-zA-Z0-9_-]{3,20}$'): 
+					current_user.username = general_sanitize(request.form['new_uname'])
+				if request.form['new_email'] and not is_valid(request.form['new_email'], r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'): 
+					current_user.email = general_sanitize(request.form['new_email'])
 				
 				# shipping data
-				if request.form['new_street']: current_user.shippingData['street'] = request.form['new_street']
-				if request.form['new_state']: current_user.shippingData['state'] = request.form['new_state']
-				if request.form['new_city']: current_user.shippingData['city'] = request.form['new_city']
-				if request.form['new_zip']: current_user.shippingData['zip'] = request.form['new_zip']
+				if request.form['new_street'] and not is_valid(request.form['new_street'], r'^.{1,100}$'): 
+					current_user.shippingData['street'] = general_sanitize(request.form['new_street'])
+				if request.form['new_state'] and not is_valid(request.form['new_state'], r'^[A-Z]{2}'): 
+					current_user.shippingData['state'] = general_sanitize(request.form['new_state'])
+				if request.form['new_city'] and not is_valid(request.form['new_city'], r'^.{1,100}$'): 
+					current_user.shippingData['city'] = general_sanitize(request.form['new_city'])
+				if request.form['new_zip'] and not is_valid(request.form['new_zip'], r'^\d{5}'): 
+					current_user.shippingData['zip'] = general_sanitize(request.form['new_zip'])
 
 				# payment data
-				if request.form['new_card_num']: current_user.paymentData['cardNumber'] = request.form['new_card_num']
-				if request.form['new_cardholder_name']: current_user.paymentData['cardholderName'] = request.form['new_cardholder_name']
-				if request.form['new_date']: current_user.paymentData['cardDate'] = request.form['new_date']
+				if request.form['new_card_num'] and not is_valid(request.form['new_card_num'], r'^\d{16}$'): 
+					current_user.paymentData['cardNumber'] = general_sanitize(request.form['new_card_num'])
+				if request.form['new_cardholder_name'] and not is_valid(request.form['new_cardholder_name'], r'^[A-Za-z -]{1,100}$'): 
+					current_user.paymentData['cardholderName'] = general_sanitize(request.form['new_cardholder_name'])
+				if request.form['new_date'] and not is_valid(request.form['new_date'], r'^(0[1-9]|1[0-2])\/[0-9]{2}$'): 
+					current_user.paymentData['cardDate'] = general_sanitize(request.form['new_date'])
 				
+
+
 				current_user.to_db_from_class_user()
 				current_user.to_db_from_class_payment()
 				current_user.to_db_from_class_shipping()
@@ -628,6 +676,7 @@ def settings_page():
 	else: 
 		return redirect(url_for('login_page'))
 
+
 # done
 @web_app.route("/search", methods=["GET", "POST"])
 def search_page():
@@ -636,7 +685,16 @@ def search_page():
 			return render_template('search.html')
 		elif request.method == "POST":
 			if 'query' in request.form:
-				results = search_inventory(request.form['query'])
+				query = request.form['query']
+
+				#sanitizing
+				if type(query) != type(None):
+					query = general_sanitize(query)
+
+				if query == None:
+					return render_template('search.html')
+				
+				results = search_inventory(query)
 
 				if results != []:
 					return render_template('search.html', list=results)
@@ -767,7 +825,6 @@ def cart_page():
 	else:
 		return redirect(url_for('login_page'))
 
-
 # done
 @web_app.route("/order_history", methods=["GET", "POST"])
 def order_history_page():
@@ -828,8 +885,6 @@ def order_history_page():
 	else:
 		return redirect(url_for('login_page'))
 
-
-
 # done
 @web_app.route("/users", methods=["GET","POST"])
 def admin_user():
@@ -838,6 +893,13 @@ def admin_user():
 		if request.method == "POST":
 			if 'query' in request.form:
 				query = request.form['query']
+
+				#sanitizing
+				if type(query) != type(None):
+					query = general_sanitize(query)
+
+				if query == None:
+					query = ''
 
 			if 'blockUser' in request.form:
 				print('user to block =>', request.form['blockUser'])
@@ -868,6 +930,13 @@ def admin_inventory():
 		if request.method == "POST":
 			if 'query' in request.form:
 				query = request.form['query']
+
+				#sanitizing
+				if type(query) != type(None):
+					query = general_sanitize(query)
+
+				if query == None:
+					query = ''
 
 			if 'blockItem' in request.form:
 				print('item to block =>', request.form['blockItem'])
