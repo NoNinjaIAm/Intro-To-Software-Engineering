@@ -20,10 +20,10 @@ jobs:
           command: pip install selenium
       - run:
           name: Run backend.py
-          command: py backend.py
+          command: python backend.py
       - run:
           name: Run User_Story_1
-          command: py User_Story_Testing/User_Story_1.py
+          command: python User_Story_Testing/User_Story_1.py
       - run:
           name: Run Pytest Functions
           command: python3 -m pytest
