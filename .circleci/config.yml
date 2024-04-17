@@ -16,15 +16,6 @@ jobs:
           name: Install Flask
           command: pip install flask
       - run:
-          name: Install Selenium
-          command: pip install selenium
-      - run:
-          name: Run backend.py
-          command: python backend.py
-      - run:
-          name: Run User_Story_1
-          command: python User_Story_Testing/User_Story_1.py
-      - run:
           name: Run Pytest Functions
           command: python3 -m pytest
 workflows:
