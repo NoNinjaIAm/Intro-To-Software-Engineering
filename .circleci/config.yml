@@ -17,7 +17,7 @@ jobs:
           command: pip install flask
       - run:
           name: Install Selenium
-          command: pip install flask
+          command: pip install selenium
       - run:
           name: Run backend.py
           command: py backend.py
