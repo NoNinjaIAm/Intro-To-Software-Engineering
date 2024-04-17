@@ -1,36 +1,28 @@
 version: 2.1
-orbs:
-  python: circleci/python@2.1.1
-  heroku: circleci/heroku@1.2.6
-
 jobs:
-  build_and_test: # this can be any name you choose
-    executor: python/default
+  build: 
+    working_directory: ~/SE-GROUP10
+    docker:
+      - image: "circleci/python:3.6.4"
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
-      - run: fghggdfgdfgdf
+      
+
+  test:
+    working_directory: ~/SE-GROUP10
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      # Replace this with a real test runner invocation
       - run:
           name: Run tests
           command: python -m pytest
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
-
-  deploy: # this can be any name you choose
-    executor: python/default
-    steps:
-      - attach_workspace:
-          at: ~/project
-      - heroku/deploy-via-git:
-          force: true # force push when pushing to the heroku remote, see: https://devcenter.heroku.com/articles/git
 
 workflows:
-  test_my_app:
+  build_and_test:
     jobs:
-      - build_and_test
-      - deploy:
+      - build
+      - test:
           requires:
-            - build_and_test # only deploy if the build_and_test job has completed
+            - build
