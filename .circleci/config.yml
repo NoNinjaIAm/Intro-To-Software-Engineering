@@ -10,7 +10,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-      - run: pip install -e .
+      - run: fghggdfgdfgdf
       - run:
           name: Run tests
           command: python -m pytest
