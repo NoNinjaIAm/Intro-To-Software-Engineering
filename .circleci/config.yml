@@ -15,6 +15,7 @@ jobs:
     steps:
       - checkout
       # Replace this with a real test runner invocation
+      - run: python -m pip install pytest
       - run:
           name: Run tests
           command: python -m pytest
