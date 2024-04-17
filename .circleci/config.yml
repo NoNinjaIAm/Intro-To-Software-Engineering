@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  python: circleci/python@3.12.1
+  python: circleci/python@2.1.1
   heroku: circleci/heroku@1.2.6
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
           name: Run tests
           command: python -m pytest
       - persist_to_workspace:
-          root: ~/SE-GROUP10
+          root: ~/project
           paths:
             - .
 
@@ -23,7 +23,7 @@ jobs:
     executor: python/default
     steps:
       - attach_workspace:
-          at: ~/SE-GROUP10
+          at: ~/project
       - heroku/deploy-via-git:
           force: true # force push when pushing to the heroku remote, see: https://devcenter.heroku.com/articles/git
 
