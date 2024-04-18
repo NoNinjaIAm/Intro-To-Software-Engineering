@@ -28,8 +28,8 @@
                     <input type="text" placeholder="Enter Username" name="username"  class="textbox">
                     
                     <select name="user_type" id="userType" required>
-                        <option value="1">Buyer</option>
-                        <option value="2">Seller</option>
+                        <option value="0">Buyer</option>
+                        <option value="1">Seller</option>
                     </select>
     
                     <br/><br/>
@@ -42,6 +42,12 @@
                     <button type="submit" name="registerAccount">Register</button>
                 </div>
             </form>
+            {% if invalid_credentials %}
+                <p id="invalid_flag">Invalid login</p>
+            {% endif %}
+            {% if pendingAccount %}
+                <p id="pending_flag">Account needs approval</p>
+            {% endif %}
         </div>
 
         

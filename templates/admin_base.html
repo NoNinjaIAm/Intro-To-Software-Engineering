@@ -12,8 +12,7 @@
     <body>
 
         <!-- Navigation Bar -->
-        <!-- nav bar -->
-        <div class="topnav">
+        <!-- nav bar -->        <div class="topnav">
             <a class="homeButton" href="/">
                 <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
             </a>
@@ -25,8 +24,12 @@
             <a class="topButtons" href="/users">
                 <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Users" height="90px" width="90px">
             </a>
-            <a class="topButtons" href="/sdfgdsfa">
-                <img src="{{ url_for('static', filename='images/logoutIcon.png') }}" alt="Users" height="90px" width="90px">
+            <a class="topButtons">
+                <form method="POST">
+                    <button class="topButtons" name="logoutButton" style="background: None; border: None">
+                        <img src="{{ url_for('static', filename='images/logoutIcon.png') }}" alt="Users" height="90px" width="90px"/>
+                    </button>
+                </form>
             </a>
         </div>
         

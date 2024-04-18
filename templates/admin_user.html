@@ -25,6 +25,10 @@
         <div class="item4">
             <form method="POST">
                 <button name="blockUser" type="submit" value="{{ item['userID'] }}">Block User</button>
+                <span style="color:white">...</span>
+                {% if item['pending'] %}
+                <button name="approval" type="submit" value="{{ item['userID'] }}">Approve User</button>
+                {% endif %}
             </form>
         </div> 
             
