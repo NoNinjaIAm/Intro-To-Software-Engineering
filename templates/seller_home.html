@@ -26,7 +26,16 @@
                 Item Price: ${{ item['price'] }} <br/>
                 Total Earned From Sales: ${{ item['price']*item['sold'] }}
             </p>
-            <p>Order ID - {{ item['orderID'] }}</p>
+            <form method="POST">
+                <button name="buyerList" type="submit" value="{{ item['itemID'] }}">Buyer list</button>
+            </form>
+            {% if buyerList | length > 0 %}
+                <p>
+                    {% for buyer in buyerList %}
+                        {{ buyer }},
+                    {% endfor %}
+                </p>
+            {% endif %}
         </div>
       </div>  
     {% endfor %}
