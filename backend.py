@@ -259,7 +259,10 @@ class User:
   				sf.execute_statement(conn, f'INSERT INTO cart (cartID, userID, itemID, quantity) VALUES ({newCartId}, {current_user.userID}, {itemID}, {quantity})')
   		
 
-
+class ItemsToCompare:
+	def __init__(self):
+		self.item1 = None
+		self.item2 = None
 
 
 
@@ -379,7 +382,7 @@ def is_valid(pattern, text):
 
 web_app = Flask(__name__)
 current_user = User(None, None)
-compare1, compare2 = None, None
+comparison = ItemsToCompare()
 
 
 
@@ -867,11 +870,48 @@ def cart_page():
 			return render_template('cart.html', list=totalData, cartPrice=total, bool=paid)
 
 
+		if request.method == "POST" and 'compareButton' in request.form:
+			print("comparing =>",request.form['compareButton'])
+			with sf.create_connection('database.db') as conn:
+				itemID = int(request.form['compareButton'])
+				temp = sf.execute_statement(conn, f'SELECT itemName,price, quantity FROM inventory WHERE itemID={itemID}')
+				print('item data for compare =>', temp)
+
+				if temp != []:
+					temp = temp[0]
+
+					if (comparison.item1 != None and comparison.item2 != None):
+						comparison.item1 = {
+							'name': temp[0],
+							'price': temp[1],
+							'quantity': temp[2]
+						}
+
+					elif (comparison.item1 == None):
+						comparison.item1 = {
+							'name': temp[0],
+							'price': temp[1],
+							'quantity': temp[2]
+						}
+
+					else:
+						comparison.item2 = {
+							'name': temp[0],
+							'price': temp[1],
+							'quantity': temp[2]
+						}
+				
+
+		if request.method == "POST" and 'removeFirstItem' in request.form:
+			comparison.item1 = None
+
+		if request.method == "POST" and 'removeSecondItem' in request.form:
+			comparison.item2 = None
 
 
-
-
-		return render_template('cart.html', list=totalData, cartPrice=total, bool=paid)
+		print("item1 =>", comparison.item1)
+		print("item2 =>", comparison.item2)
+		return render_template('cart.html', list=totalData, cartPrice=total, bool=paid, compare1=comparison.item1, compare2=comparison.item2)
 	else:
 		return redirect(url_for('login_page'))
 
