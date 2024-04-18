@@ -321,11 +321,17 @@ def search_users(username):
 
 		data = []
 		for account in results:
+			userID = account[0]
+			pendingBool = bool(sf.execute_statement(conn, f'SELECT * FROM pending WHERE userID={userID}'))
+
+
+
 			temp = {
 			'userID': account[0],
 			'username': account[1],
 			'email': account[2],
-			'type': account[3]
+			'type': account[3],
+			'pending': pendingBool
 			}
 			data.append(temp)
 
@@ -370,8 +376,10 @@ def is_valid(pattern, text):
 
 	return bool(matches)
 
+
 web_app = Flask(__name__)
 current_user = User(None, None)
+compare1, compare2 = None, None
 
 
 
@@ -512,7 +520,7 @@ def home_page():
 
 		current_user.from_db_to_class_cart()
 		return render_template('buyer_home.html', fruits=fruitData, veggies=veggieData)
-	elif current_user.type == 2:
+	elif current_user.type == 3:
 		print("admin portal")
 		return redirect(url_for('admin_user'))
 	else: 
@@ -548,7 +556,9 @@ def login_page():
 			if psw != credentials[0][1] or uname != credentials[0][0]:
 				print('Incorrect credentials')
 				return render_template('login.html', invalid_credentials=True)
-			
+
+
+
 
 			print("\nCorrect credentials\n")
 			current_user.username = uname
@@ -561,6 +571,19 @@ def login_page():
 				current_user.from_db_to_class()
 
 			print("\nusername, ID, type => ", current_user.username, current_user.userID, current_user.type)
+
+
+			# filtering for pending accounts
+			pending = False
+			with sf.create_connection('database.db') as conn:
+				pending = bool(sf.execute_statement(conn, f'SELECT * FROM pending WHERE userID={current_user.userID}'))
+
+			if (pending == True):
+				print(f'{current_user.username} has a pending account...\n')
+				current_user.reset()
+				return render_template('login.html', pendingAccount=True)
+
+
 			return redirect(url_for('home_page'))
 
 		if 'registerAccount' in request.form:
@@ -581,10 +604,9 @@ def register_page():
 
 
 		
-		if not is_valid(new_email, r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'): return render_template('register.html', incorrect=True) 
-		if not is_valid(new_uname, r'^[a-zA-Z0-9_-]{3,20}$'): return render_template('register.html', incorrect=True)
-		if not is_valid(new_psw, r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$'): return render_template('register.html', incorrect=True)
-
+		if not is_valid(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', new_email): return render_template('register.html', incorrect=True) 
+		if not is_valid(r'^[a-zA-Z0-9_-]{3,20}$', new_uname): return render_template('register.html', incorrect=True)
+		if not is_valid(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$', new_psw): return render_template('register.html', incorrect=True)
 
 
 
@@ -611,6 +633,11 @@ def register_page():
 
 		# missing password and pointers
 		current_user.to_db_from_class_user()
+
+		if current_user.type == 1:
+			with sf.create_connection('database.db') as conn:
+				newPendingID = new_id('pending', 'pending')
+				sf.execute_statement(conn, f'INSERT INTO pending (pending, userID) VALUES ({newPendingID}, {current_user.userID})')
 
 
 
@@ -735,6 +762,7 @@ def search_page():
 	else:
 		return redirect(url_for('login_page'))
 
+
 # done
 @web_app.route("/cart", methods=["GET", "POST"])
 def cart_page():
@@ -847,6 +875,7 @@ def cart_page():
 	else:
 		return redirect(url_for('login_page'))
 
+
 # done
 @web_app.route("/order_history", methods=["GET", "POST"])
 def order_history_page():
@@ -907,12 +936,18 @@ def order_history_page():
 	else:
 		return redirect(url_for('login_page'))
 
+
 # done
 @web_app.route("/users", methods=["GET","POST"])
 def admin_user():
 	if current_user.type == 3:
 		query = ""
 		if request.method == "POST":
+			if 'logoutButton' in request.form:
+				current_user.reset()
+				print("admin is logging out =>", current_user.username)
+				return redirect(url_for('login_page'))
+
 			if 'query' in request.form:
 				query = request.form['query']
 
@@ -935,6 +970,10 @@ def admin_user():
 					sf.execute_statement(conn, f'DELETE FROM paymentInfo WHERE userID={userID}')
 					sf.execute_statement(conn, f'DELETE FROM shippingInfo WHERE userID={userID}')
 
+			if 'approval' in request.form:
+				with sf.create_connection('database.db') as conn:
+					userID = int(request.form['approval'])
+					sf.execute_statement(conn, f'DELETE FROM pending WHERE userID={userID}')
 
 		# reuse search_inventory to find users based on search
 		users = search_users(query)
@@ -944,12 +983,18 @@ def admin_user():
 	else:
 		return redirect(url_for('login_page'))
 
+
 # done
 @web_app.route("/inventory", methods=["GET","POST"])
 def admin_inventory():
 	if current_user.type == 3:
 		query = ""
 		if request.method == "POST":
+			if 'logoutButton' in request.form:
+				current_user.reset()
+				print("admin is logging out =>", current_user.username)
+				return redirect(url_for('login_page'))
+
 			if 'query' in request.form:
 				query = request.form['query']
 

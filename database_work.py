@@ -34,14 +34,13 @@ user_id={get_current_id(conn)}')
 
 
 '''with sf.create_connection('database.db') as conn:
-	print('Adding featured table..')
-	sf.execute_statement(conn, f'CREATE TABLE featured (\
-    featuredID INT PRIMARY KEY,\
-    itemID INT NOT NULL,\
-    type INT NOT NULL,\
-    FOREIGN KEY (itemID) REFERENCES inventory(itemID)\
-);')'''
-
+	print('Adding pending table..')
+	sf.execute_statement(conn, f'CREATE TABLE pending (\
+    pending INT PRIMARY KEY,\
+    userID INT NOT NULL,\
+    FOREIGN KEY (userID) REFERENCES user(userID)\
+);')
+'''
 # checking if tables there
 '''with sf.create_connection('database.db') as conn:
 	print('\ntesting table')

@@ -86,3 +86,9 @@ CREATE TABLE featured (
     type INT NOT NULL,
     FOREIGN KEY (itemID) REFERENCES inventory(itemID)
 );
+
+CREATE TABLE pending (
+    pending INT PRIMARY KEY,
+    userID INT NOT NULL,
+    FOREIGN KEY (userID) REFERENCES user(userID)
+);
