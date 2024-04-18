@@ -365,6 +365,9 @@ def general_sanitize(string):
 
 def is_valid(pattern, text):
 	matches = re.findall(pattern, text)
+
+	print('\nregex =>',matches, bool(matches), '\n')
+
 	return bool(matches)
 
 web_app = Flask(__name__)
@@ -613,27 +616,27 @@ def settings_page():
 				return redirect(url_for("login_page"))
 
 			if 'new_info' in request.form:
-				if request.form['new_uname'] and not is_valid(request.form['new_uname'], r'^[a-zA-Z0-9_-]{3,20}$'): 
+				if request.form['new_uname'] and is_valid(r'^[a-zA-Z0-9_-]{3,20}$', request.form['new_uname']): 
 					current_user.username = general_sanitize(request.form['new_uname'])
-				if request.form['new_email'] and not is_valid(request.form['new_email'], r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'): 
-					current_user.email = general_sanitize(request.form['new_email'])
+				if request.form['new_email'] and is_valid(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}',request.form['new_email']):
+						current_user.email = general_sanitize(request.form['new_email'])
 				
 				# shipping data
-				if request.form['new_street'] and not is_valid(request.form['new_street'], r'^.{1,100}$'): 
+				if request.form['new_street'] and is_valid(r'^.{1,100}$', request.form['new_street']): 
 					current_user.shippingData['street'] = general_sanitize(request.form['new_street'])
-				if request.form['new_state'] and not is_valid(request.form['new_state'], r'^[A-Z]{2}'): 
+				if request.form['new_state'] and is_valid(r'^[A-Z]{2}', request.form['new_state']): 
 					current_user.shippingData['state'] = general_sanitize(request.form['new_state'])
-				if request.form['new_city'] and not is_valid(request.form['new_city'], r'^.{1,100}$'): 
+				if request.form['new_city'] and is_valid(r'^.{1,100}$', request.form['new_city']): 
 					current_user.shippingData['city'] = general_sanitize(request.form['new_city'])
-				if request.form['new_zip'] and not is_valid(request.form['new_zip'], r'^\d{5}'): 
+				if request.form['new_zip'] and is_valid(r'^\d{5}', request.form['new_zip']): 
 					current_user.shippingData['zip'] = general_sanitize(request.form['new_zip'])
 
 				# payment data
-				if request.form['new_card_num'] and not is_valid(request.form['new_card_num'], r'^\d{16}$'): 
+				if request.form['new_card_num'] and is_valid(r'^\d{16}$', request.form['new_card_num']): 
 					current_user.paymentData['cardNumber'] = general_sanitize(request.form['new_card_num'])
-				if request.form['new_cardholder_name'] and not is_valid(request.form['new_cardholder_name'], r'^[A-Za-z -]{1,100}$'): 
+				if request.form['new_cardholder_name'] and is_valid(r'^[A-Za-z -]{1,100}$', request.form['new_cardholder_name']): 
 					current_user.paymentData['cardholderName'] = general_sanitize(request.form['new_cardholder_name'])
-				if request.form['new_date'] and not is_valid(request.form['new_date'], r'^(0[1-9]|1[0-2])\/[0-9]{2}$'): 
+				if request.form['new_date'] and is_valid(r'^(0[1-9]|1[0-2])\/[0-9]{2}$', request.form['new_date']): 
 					current_user.paymentData['cardDate'] = general_sanitize(request.form['new_date'])
 				
 
