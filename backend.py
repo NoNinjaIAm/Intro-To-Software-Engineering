@@ -390,6 +390,7 @@ def home_page():
 
 
 	if current_user.type == 1:
+		buyerList=[]
 		# removing item
 		if request.method == "POST":
 			if 'removeItem' in request.form:
@@ -400,6 +401,22 @@ def home_page():
 					sf.execute_statement(conn, f'DELETE FROM cart WHERE itemID={itemID}')
 					sf.execute_statement(conn, f'DELETE FROM orders WHERE itemID={itemID}')
 
+			if 'buyerList' in request.form:
+				with sf.create_connection('database.db') as conn:
+					itemID = request.form['buyerList']
+					userIDlist = sf.execute_statement(conn, f'SELECT userID FROM orders WHERE itemID={itemID}')
+
+					for userID in userIDlist:
+						userID = userID[0]
+						username = sf.execute_statement(conn, f'SELECT username FROM user WHERE userID={userID}')
+
+						if username == [] or username == None:
+							pass
+						else:
+							username = username [0][0]
+							buyerList.append(username)
+
+				
 		
 			# adding to inventory
 			if 'addToInventory' in request.form:
@@ -426,6 +443,7 @@ def home_page():
 
 		# getting list
 		totalData = []
+		print("buyerList =>", buyerList)
 		with sf.create_connection('database.db') as conn:
 			itemData = sf.execute_statement(conn, f'SELECT itemName,price,itemID FROM inventory WHERE userID={current_user.userID}')
 			
@@ -446,7 +464,7 @@ def home_page():
 					totalData.append(data)
 
 
-		return render_template('seller_home.html', productList=totalData)
+		return render_template('seller_home.html', productList=totalData, buyerList=buyerList)
 	elif current_user.type == 0:
 		if request.method == "POST" and 'action' in request.form:
 			# add to cart
@@ -819,6 +837,7 @@ def cart_page():
 
 			
 			return render_template('cart.html', list=totalData, cartPrice=total, bool=paid)
+
 
 
 
