@@ -18,6 +18,53 @@
         </p>
     {% endif %}
 
+
+    {% if compare1 != None and compare2 != None %}
+    <div class="grid-container">
+        <div class="displayImage">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        <div class="displayDesc">
+            <p class="totalMoney">
+                <strong style="font-size: 30px;">{{ compare1['name'] }}</strong> <br/><br/>
+                Price: ${{ compare1['price'] }} <br/>
+                </br>
+                
+            </p>
+        
+
+            
+        </div>
+        <form method="POST"> 
+            <button type="submit" name="removeFirstItem">Remove</button>
+        </form>
+    </div>
+
+    <div class="grid-container">
+        <div class="displayImage">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        <div class="displayDesc">
+            <p class="totalMoney">
+                <strong style="font-size: 30px;">{{ compare2['name'] }}</strong> <br/><br/>
+                Price: ${{ compare2['price'] }} <br/>
+                </br>
+                
+            </p>
+        
+
+            
+        </div>
+        <form method="POST"> 
+            <button type="submit" name="removeSecondItem">Remove</button>
+        </form>
+    </div>
+
+    <p>The difference between the {{compare1['name']}} and the {{compare2['name']}} is ${{ compare1['price'] - compare2['price'] }}</p>
+    {% endif %}
+
+
+
     <!-- Displaying Items in Cart-->
     {% for item in list %}
         <div class="grid-container">
@@ -37,6 +84,11 @@
                         </form>
                     </div>
                     </br>
+                    <form method="POST" style="text-align: right;">
+                        <button class="addRemoveQuantity" type="submit" name="compareButton" value="{{ item['itemID'] }}" style="padding: 1%">
+                            Compare
+                        </button>
+                    </form><br/>
                     <div style="text-align: right;">
                         <strong>Total:</strong>  ${{ item['price'] *  item['quantity']}}
                     </div>
