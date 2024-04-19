@@ -395,6 +395,7 @@ def home_page():
 	fruitData = []
 	veggieResults = None
 	veggieData = []
+	idForBuyerList = []
 
 
 	current_user.to_db_from_class_cart()
@@ -415,6 +416,7 @@ def home_page():
 			if 'buyerList' in request.form:
 				with sf.create_connection('database.db') as conn:
 					itemID = request.form['buyerList']
+					idForBuyerList.append(itemID)
 					userIDlist = sf.execute_statement(conn, f'SELECT userID FROM orders WHERE itemID={itemID}')
 
 					for userID in userIDlist:
@@ -425,6 +427,7 @@ def home_page():
 							pass
 						else:
 							username = username [0][0]
+
 							buyerList.append(username)
 
 				
@@ -474,8 +477,14 @@ def home_page():
 					
 					totalData.append(data)
 
+		buyerList = list(set(buyerList))
 
-		return render_template('seller_home.html', productList=totalData, buyerList=buyerList)
+		if idForBuyerList != []:
+			idForBuyerList = int(idForBuyerList[0])
+
+		print("itemID for buyerList", idForBuyerList, type(idForBuyerList))
+		return render_template('seller_home.html', productList=totalData, buyerList=buyerList, id=idForBuyerList)
+
 	elif current_user.type == 0:
 		if request.method == "POST" and 'action' in request.form:
 			# add to cart
@@ -771,6 +780,7 @@ def search_page():
 def cart_page():
 	if current_user.type == 0:
 		totalData, total = get_cart(current_user)
+		comparison.item1, comparison.item2 = None, None
 
 
 
@@ -797,6 +807,45 @@ def cart_page():
 				return redirect(url_for('cart_page'))
 
 					
+		if request.method == "POST" and 'compareButton' in request.form:
+			print("comparing =>",request.form['compareButton'])
+			with sf.create_connection('database.db') as conn:
+				itemID = int(request.form['compareButton'])
+				temp = sf.execute_statement(conn, f'SELECT itemName,price, quantity FROM inventory WHERE itemID={itemID}')
+				print('item data for compare =>', temp)
+
+				if temp != []:
+					temp = temp[0]
+
+					if (comparison.item1 != None and comparison.item2 != None):
+						comparison.item1 = {
+							'name': temp[0],
+							'price': temp[1],
+							'quantity': temp[2]
+						}
+
+					elif (comparison.item1 == None):
+						comparison.item1 = {
+							'name': temp[0],
+							'price': temp[1],
+							'quantity': temp[2]
+						}
+
+					else:
+						comparison.item2 = {
+							'name': temp[0],
+							'price': temp[1],
+							'quantity': temp[2]
+						}
+				
+
+		if request.method == "POST" and 'removeFirstItem' in request.form:
+			comparison.item1 = None
+
+		if request.method == "POST" and 'removeSecondItem' in request.form:
+			comparison.item2 = None
+
+
 		# paying for cart
 		if request.method == "POST" and 'payButton' in request.form:
 			print("\nPaying...")
@@ -863,50 +912,12 @@ def cart_page():
 				paid = True
 				totalData, total = get_cart(current_user)
 				request.method = "GET"
-				return render_template('cart.html', list=totalData, cartPrice=total, bool=paid)
+				return render_template('cart.html', list=totalData, cartPrice=total, bool=paid, compare1=comparison.item1, compare2=comparison.item2)
 
 
 			
-			return render_template('cart.html', list=totalData, cartPrice=total, bool=paid)
+			return render_template('cart.html', list=totalData, cartPrice=total, bool=paid, compare1=comparison.item1, compare2=comparison.item2)
 
-
-		if request.method == "POST" and 'compareButton' in request.form:
-			print("comparing =>",request.form['compareButton'])
-			with sf.create_connection('database.db') as conn:
-				itemID = int(request.form['compareButton'])
-				temp = sf.execute_statement(conn, f'SELECT itemName,price, quantity FROM inventory WHERE itemID={itemID}')
-				print('item data for compare =>', temp)
-
-				if temp != []:
-					temp = temp[0]
-
-					if (comparison.item1 != None and comparison.item2 != None):
-						comparison.item1 = {
-							'name': temp[0],
-							'price': temp[1],
-							'quantity': temp[2]
-						}
-
-					elif (comparison.item1 == None):
-						comparison.item1 = {
-							'name': temp[0],
-							'price': temp[1],
-							'quantity': temp[2]
-						}
-
-					else:
-						comparison.item2 = {
-							'name': temp[0],
-							'price': temp[1],
-							'quantity': temp[2]
-						}
-				
-
-		if request.method == "POST" and 'removeFirstItem' in request.form:
-			comparison.item1 = None
-
-		if request.method == "POST" and 'removeSecondItem' in request.form:
-			comparison.item2 = None
 
 
 		print("item1 =>", comparison.item1)
