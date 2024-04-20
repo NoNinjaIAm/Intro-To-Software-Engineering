@@ -29,7 +29,7 @@
             <form method="POST">
                 <button name="buyerList" type="submit" value="{{ item['itemID'] }}">Buyer list</button>
             </form>
-            {% if buyerList | length > 0 %}
+            {% if buyerList != [] and id==item['itemID'] %}
                 <p>
                     {% for buyer in buyerList %}
                         {{ buyer }},
