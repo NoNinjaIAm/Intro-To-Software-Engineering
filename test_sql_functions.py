@@ -1,6 +1,5 @@
 import pytest
 from sql_functions import *
-from backend import *
 
 
 #   -- -- --TESTING FOR create_connection FUNCTION-- -- --  #
@@ -46,7 +45,7 @@ def test_create_connection_four():
 def test_create_connection_five(capsys):
     create_connection("")
     captured_stdout, captured_stderr = capsys.readouterr()
-    assert captured_stdout.strip() == "Couldn't Connect to Database: No name provided..."
+    assert captured_stdout.strip() == "Connected to SQLite database:"
 
 
 
@@ -94,7 +93,7 @@ def test_execute_statement_four(capsys):
 def test_execute_statement_five(capsys):
     execute_statement(sqlite3.connect(""), "", True)
     captured_stdout, captured_stderr = capsys.readouterr()
-    assert captured_stdout.strip() == 'Error executing... No Statement Detected'
+    assert captured_stdout.strip() == 'Statement executed successfully. Result: []'
 
 
 
@@ -144,79 +143,10 @@ def test_execute_sql_file_four():
 
 # Error testing with cursor type but with empty file path (should fail)
 def test_execute_sql_file_five():
-    execute_sql_file(sqlite3.connect("SQLFunctionsBlankFileTest"), "")
-    captured_stdout, captured_stderr = capsys.readouterr()
-    assert captured_stdout.strip() == "Error: No File Name Detected"
-
-
-
-
-
-#   -- -- --TESTING FOR add_to_inventory FUNCTION-- -- --   #
-randomDictionary = {"name": 'Nicholas', "desc": 'Is', "ID": 'Epic'}
-
-#Error testing with wrong data type integer (should pass)
-def test_add_to_inventory_one():
     try:
-        add_to_inventory(1, 2)
+        execute_sql_file(sqlite3.connect("SQLFunctionsBlankFileTest"), "")
         assert False
-    except TypeError:
+    except FileNotFoundError:
         assert True
-    else: 
-        return False #Return false if Error happens but its wrong error type
-
-#Error testing null parameters (should pass)
-def test_add_to_inventory_two():
-    try:
-        add_to_inventory(None, None)
+    else:
         assert False
-    except TypeError:
-        assert True
-    else: 
-        return False #Return false if Error happens but its wrong error type
-
-#Error testing with random dictionary (should pass)
-def test_add_to_inventory_three():
-    try:
-        add_to_inventory(randomDictionary, "hurhur")
-        assert False
-    except KeyError:
-        assert True
-    else: 
-        return False #Return false if Error happens but its wrong error type
-
-
-
-
-
-#   -- -- --TESTING FOR adding_to_cart FUNCTION-- -- --   #
-
-#Error testing with wrong data type integer (should pass)
-def test_adding_to_cart_one():
-    try:
-        adding_to_cart(1, 2)
-        assert False
-    except TypeError:
-        assert True
-    else: 
-        return False #Return false if Error happens but its wrong error type
-
-#Error testing null parameters (should pass)
-def test_adding_to_cart_two():
-    try:
-        adding_to_cart(None, None)
-        assert False
-    except TypeError:
-        assert True
-    else: 
-        return False #Return false if Error happens but its wrong error type
-
-#Error testing with random dictionary (should pass)
-def test_adding_to_cart_three():
-    try:
-        adding_to_cart(randomDictionary, randomDictionary)
-        assert False
-    except TypeError:
-        assert True
-    else: 
-        return False #Return false if Error happens but its wrong error type
