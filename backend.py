@@ -817,14 +817,7 @@ def cart_page():
 				if temp != []:
 					temp = temp[0]
 
-					if (comparison.item1 != None and comparison.item2 != None):
-						comparison.item1 = {
-							'name': temp[0],
-							'price': temp[1],
-							'quantity': temp[2]
-						}
-
-					elif (comparison.item1 == None):
+					if (comparison.item1 == None):
 						comparison.item1 = {
 							'name': temp[0],
 							'price': temp[1],
