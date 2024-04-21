@@ -125,10 +125,9 @@ class User:
 			  if data == []:
 			  	self.cartData = None
 			  else:
-			  	data = data[0]
-			  	self.cartData = {
-						data[0]: data[1]
-					}
+			  	self.cartData = {}
+			  	for item in data:
+				  	self.cartData[item[0]] = item[1]
  
   def to_db_from_class_user(self):
   	if self.userID != None:
@@ -238,7 +237,7 @@ class User:
   			inventoryQuantity = sf.execute_statement(conn, f'SELECT quantity FROM inventory WHERE itemID={itemID}')
   			if inventoryQuantity != []:
   				inventoryQuantity = inventoryQuantity[0][0]
-  				print(inventoryQuantity)
+  				print("inventory quantity:",inventoryQuantity)
   			else:
   					return
 
@@ -250,13 +249,17 @@ class User:
   					sf.execute_statement(conn, f'DELETE FROM cart WHERE userID={self.userID} AND itemID={itemID}')
   					self.from_db_to_class_cart()
   				elif newQuantity > inventoryQuantity:
+  					print("preventing cart from being more than inventory")
   					newQuantity = inventoryQuantity
 
   				sf.execute_statement(conn, f'UPDATE cart SET quantity={newQuantity} WHERE itemID={itemID} AND userID={self.userID}')
   			else:
   				cartQuantity = quantity
   				newCartId = new_id('cartID', 'cart')
+
+  				print("inserting new item into cart db")
   				sf.execute_statement(conn, f'INSERT INTO cart (cartID, userID, itemID, quantity) VALUES ({newCartId}, {current_user.userID}, {itemID}, {quantity})')
+  				current_user.from_db_to_class_cart()
   		
 
 class ItemsToCompare:
@@ -367,6 +370,7 @@ def get_cart(user):
 
 def general_sanitize(string):
 	if "FROM" in string.upper() or "CREATE" in string.upper() or "DROP" in string.upper() or "INTO" in string.upper() or "WHERE" in string.upper():
+		print("stanitize error")
 		return None
 	else:
 		return string
@@ -765,6 +769,7 @@ def search_page():
 				itemID = request.form['add']
 				
 				current_user.add_to_cart(itemID)
+				print("user cart after adding in search =>", current_user.cartData)
 				return redirect(url_for('search_page'))
 					
 
@@ -780,7 +785,6 @@ def search_page():
 def cart_page():
 	if current_user.type == 0:
 		totalData, total = get_cart(current_user)
-		comparison.item1, comparison.item2 = None, None
 
 
 
@@ -817,6 +821,8 @@ def cart_page():
 				if temp != []:
 					temp = temp[0]
 
+
+					#fix
 					if (comparison.item1 == None):
 						comparison.item1 = {
 							'name': temp[0],
