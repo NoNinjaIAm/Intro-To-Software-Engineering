@@ -68,7 +68,6 @@ class User:
   			for item in results:
   				self.cartData[int(item[0])] = item[1]
 
-  	print("cart =>", self.cartData)
 
   def from_db_to_class(self):
   	if self.userID != None:
@@ -170,7 +169,7 @@ class User:
   				sf.execute_statement(conn, f'UPDATE user SET payment_ptr={newPaymentID} WHERE userID={self.userID}') 
 
   				# adding to paymentInfo table
-  				sf.execute_statement(conn, f'INSERT INTO paymentInfo (paymentID, userID, cardNumber, cardholderName, cardDate) VALUES ({newPaymentID}, {self.userID}, {num}, \'{name}\', {date}');
+  				sf.execute_statement(conn, f'INSERT INTO paymentInfo (paymentID, userID, cardNumber, cardholderName, cardDate) VALUES ({newPaymentID}, {self.userID}, {num}, \'{name}\', {date})');
 
   			else:
   				sf.execute_statement(conn, f'UPDATE paymentInfo SET cardNumber=\'{num}\',cardholderName=\'{name}\',cardDate=\'{date}\' WHERE userID=\'{self.userID}\'')
@@ -194,9 +193,11 @@ class User:
   				sf.execute_statement(conn, f'UPDATE user SET shipping_ptr={newShippingID} WHERE userID={self.userID}') 
 
   				# adding to shippingInfo table
-  				sf.execute_statement(conn, f'INSERT INTO shippingInfo (shippingID, userID, street, city, state, zip, country) VALUES ({newShippingID}, {self.userID}, \'{street}\', \'{city}\', \'{state}\', \'{zip}\', \'{country}\'');
+  				print("inserting database shipping")
+  				sf.execute_statement(conn, f'INSERT INTO shippingInfo (shippingID, userID, street, city, state, zip, country) VALUES ({newShippingID}, {self.userID}, \'{street}\', \'{city}\', \'{state}\', \'{zip}\', \'{country}\')');
 
   			else:
+  				print("updating database shipping")
   				sf.execute_statement(conn, f'UPDATE shippingInfo SET street=\'{street}\', city=\'{city}\', state=\'{state}\', zip=\'{zip}\', country=\'{country}\' WHERE userID=\'{self.userID}\'')
 
   def to_db_from_class_cart(self):
@@ -212,7 +213,6 @@ class User:
   				pass
   			else:
 	  			for item in self.cartData:
-	  				print("cart item",item,self.cartData[item])
 	  				itemID = item
 	  				quantity = self.cartData[item]
 	  				price = sf.execute_statement(conn, f'SELECT price FROM inventory WHERE itemID={itemID}')
@@ -677,10 +677,17 @@ def settings_page():
 				return redirect(url_for("login_page"))
 
 			if 'new_info' in request.form:
+				# account info
 				if request.form['new_uname'] and is_valid(r'^[a-zA-Z0-9_-]{3,20}$', request.form['new_uname']): 
 					current_user.username = general_sanitize(request.form['new_uname'])
 				if request.form['new_email'] and is_valid(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}',request.form['new_email']):
 						current_user.email = general_sanitize(request.form['new_email'])
+
+				# names
+				if request.form['new_fname'] and is_valid(r'^[a-zA-Z0-9_-]{1,20}$', request.form['new_fname']): 
+					current_user.fname = general_sanitize(request.form['new_fname'])
+				if request.form['new_lname'] and is_valid(r'^[a-zA-Z0-9_-]{1,20}$', request.form['new_lname']): 
+					current_user.lname = general_sanitize(request.form['new_lname'])
 				
 				# shipping data
 				if request.form['new_street'] and is_valid(r'^.{1,100}$', request.form['new_street']): 
@@ -695,7 +702,7 @@ def settings_page():
 				# payment data
 				if request.form['new_card_num'] and is_valid(r'^\d{16}$', request.form['new_card_num']): 
 					current_user.paymentData['cardNumber'] = general_sanitize(request.form['new_card_num'])
-				if request.form['new_cardholder_name'] and is_valid(r'^[A-Za-z -]{1,100}$', request.form['new_cardholder_name']): 
+				if request.form['new_cardholder_name'] and is_valid(r'^[A-Za-z\-\']{1,20} [A-Za-z\-\']{1,20}$', request.form['new_cardholder_name']): 
 					current_user.paymentData['cardholderName'] = general_sanitize(request.form['new_cardholder_name'])
 				if request.form['new_date'] and is_valid(r'^(0[1-9]|1[0-2])\/[0-9]{2}$', request.form['new_date']): 
 					current_user.paymentData['cardDate'] = general_sanitize(request.form['new_date'])
