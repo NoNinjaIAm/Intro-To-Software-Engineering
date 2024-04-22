@@ -38,26 +38,26 @@
                 </div><br/>
             {% endif %} 
 
+            <label style="text-align: left;" for="email"><b>Email: </b></label></br>
+            <input type="text" placeholder="Enter Email" name="email" id="email" required>
+            <label for="uname"><b></br>Username: </b></label></br>
+            <input type="text" placeholder="Enter Username" name="uname" id="uname" required>
+            <label for="psw"><b></br>Password: </b></label></br>
+            <input type="text" placeholder="Enter Password" name="psw" id="psw" required>
+            <label for="psw-repeat"><b></br>Repeat Password: </b></label></br>
+            <input type="text" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+            </br>
+            
 
             <select name="user_type" id="userType" required>
                 <option value="0">Buyer</option>
                 <option value="1">Seller</option>
             </select><br/><br/>
-
-
-            <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" id="email" required>
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" id="uname" required>
-            <label for="psw"><b>Password</b></label>
-            <input type="text" placeholder="Enter Password" name="psw" id="psw" required>
-            <label for="psw-repeat"><b>Repeat</b></label>
-            <input type="text" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+            
             <hr>
             <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
             <button type="submit" class="registerbtn">Register</button>
-        </div>
-        <div class="container signin">
+
             <p>Already have an account? <a href="/login">Sign in</a></p>
         </div>
     </form>

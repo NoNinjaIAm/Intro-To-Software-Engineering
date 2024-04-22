@@ -1,0 +1,44 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}FRUHB || Inventory{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
+    <h1 class="headerSection">Inventory</h1>
+    <!-- printing out history -->
+    {% for item in itemList %}
+      <div class="grid-container2">
+        <div class="displayImage">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        
+        <div class="displayDesc">
+            <p class="totalMoney">
+                Seller: {{ item['username'] }} <br/>
+                Item Name: {{ item['itemName'] }}<br/>
+                Item Price: ${{ item['price'] }} <br/>
+                Item Quantity: {{ item['quantity'] }} <br/>
+                Items Sold: {{ item['sold'] }} <br/>
+            </p>
+            <h2>
+                {{ item['type'] }}
+            </h2>
+            <form method="POST">
+                <button name="blockItem" type="submit" value="{{ item['itemID'] }}">Block Item</button>
+            </form>
+        </div>  
+      </div>  
+    {% endfor %}
+
+
+
+
+    <!-- footer -->
+</br></br></br></br></br></br></br>
+    <address class="bottomContacts">
+        Contact Us!!!<br>
+        (123)-456-7890<br>
+        realEmailAddress@gmail.com<br>
+    </address>
+{% endblock %}

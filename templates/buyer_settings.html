@@ -3,11 +3,11 @@
 {% block title %}FRUHB || Settings{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    
-    
 
-
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+    
+    <body>
     <div>
         <ul>
             <h1> Settings </h1>
@@ -33,39 +33,39 @@
                 {% endif %}
 
                 {% if edit %}
-                    <form action="/settings" method="POST">
+                <form action="/settings" method="POST">
 
 
-                        <strong>Username:</strong>
-                        <br/><input type="text" name="new_uname" class="inputText" placeholder="New Username..."><br/>
-                        <strong>Email Address:</strong>
-                        <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/>
-                        <strong>First Name:</strong>
-                        <br/><input type="text" name="new_fname" class="inputText" placeholder="New First Name..."><br/>
-                        <strong>Last Name:</strong>
-                        <br/><input type="text" name="new_lname" class="inputText" placeholder="New Last Name..."><br/><br/><br/>
+                    <strong>Username:</strong>
+                    <br/><input type="text" name="new_uname" class="inputText" placeholder="New Username..."><br/>
+                    <strong>Email Address:</strong>
+                    <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/>
+                    <strong>First Name:</strong>
+                    <br/><input type="text" name="new_fname" class="inputText" placeholder="New First Name..."><br/>
+                    <strong>Last Name:</strong>
+                    <br/><input type="text" name="new_lname" class="inputText" placeholder="New Last Name..."><br/><br/><br/>
 
 
-                        <address> 
-                            <strong>Shipping Information:</strong><br/>
-                            Street: <br/><input type="text" name="new_street" class="inputText" placeholder="New Street..."><br/>
-                            State: <br/><input type="text" name="new_state" class="inputText" placeholder="New State..."><br/>
-                            City: <br/><input type="text" name="new_city" class="inputText" placeholder="New City..."><br/>
-                            ZIP: <br/><input type="text" name="new_zip" class="inputText" placeholder="New ZIP..."><br/>
-                        </address>
-                        <br/><br/>
+                    <address> 
+                        <strong>Shipping Information:</strong><br/>
+                        Street: <br/><input type="text" name="new_street" class="inputText" placeholder="New Street..."><br/>
+                        State: <br/><input type="text" name="new_state" class="inputText" placeholder="New State..."><br/>
+                        City: <br/><input type="text" name="new_city" class="inputText" placeholder="New City..."><br/>
+                        ZIP: <br/><input type="text" name="new_zip" class="inputText" placeholder="New ZIP..."><br/>
+                    </address>
+                    <br/><br/>
 
-                        <address> 
-                            <strong>Payment Information:</strong><br/>
-                            Card Number: <br/><input type="text" name="new_card_num" class="inputText" placeholder="New Number..."><br/>
-                            Card Holder Name: <br/><input type="text" name="new_cardholder_name" class="inputText" placeholder="New Name..."><br/>
-                            Expiration Date: <br/><input type="text" name="new_date" class="inputText" placeholder="New Date..."><br/>
-                        </address>
-                        <br/>
-                        <input type="submit" name="new_info" value="Submit">
+                    <address> 
+                        <strong>Payment Information:</strong><br/>
+                        Card Number: <br/><input type="text" name="new_card_num" class="inputText" placeholder="New Number..."><br/>
+                        Card Holder Name: <br/><input type="text" name="new_cardholder_name" class="inputText" placeholder="New Name..."><br/>
+                        Expiration Date: <br/><input type="text" name="new_date" class="inputText" placeholder="New Date..."><br/>
+                    </address>
+                    <br/>
+                    <input type="submit" name="new_info" value="Submit">
 
-                        <br/>
-                    </form>
+                    <br/>
+                </form>
                 {% endif %}
             </p>
 
@@ -84,14 +84,12 @@
     </div>
 
 
-
-
-
-
     <!-- footer -->
+</br></br></br></br></br></br></br>
     <address class="bottomContacts">
         Contact Us!!!<br>
         (123)-456-7890<br>
         realEmailAddress@gmail.com<br>
     </address>
+</body>
 {% endblock %}

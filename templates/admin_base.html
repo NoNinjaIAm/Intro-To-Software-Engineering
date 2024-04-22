@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Include your CSS and JavaScript files here -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- linking css page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+    <body>
+
+        <!-- Navigation Bar -->
+        <!-- nav bar -->
+        <div class="topnav">
+            <a class="homeButton" href="/">
+                <img src="{{ url_for('static', filename='images/FRUHBLogo.png') }}" alt="Logo" height="90px" width="175px">
+            </a>
+            <form class="searchBarContainer" method="POST">
+                <label for="search"></label><br/>
+                <input class="searchBar" type="text" name="query" placeholder="...">
+                <button type="submit">Search</button>
+            </form>
+
+            
+            <a class="topButtons" href="/inventory">
+                <img src="{{ url_for('static', filename='images/InventoryIcon.png') }}" alt="Inventory" height="90px" width="90px">
+            </a>
+            <a class="topButtons" href="/users">
+                <img src="{{ url_for('static', filename='images/profileIcon.png') }}" alt="Users" height="90px" width="90px">
+            </a>
+            <a class="topButtons">
+                <form method="POST">
+                    <button class="topButtons" name="logoutButton" style="background: None; border: None">
+                        <img src="{{ url_for('static', filename='images/logoutIcon.png') }}" alt="Users" height="90px" width="90px"/>
+                    </button>
+                </form>
+            </a>
+        </div>
+        
+        
+
+        <!-- Content Block -->
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+
+    </body>
+</html>

@@ -3,7 +3,7 @@
 {% block title %}FRUHB || settings{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
     
     
 
@@ -27,28 +27,28 @@
                 {% endif %}
 
                 {% if edit %}
-                    <form action="/settings" method="POST">
+                <form action="/settings" method="POST">
 
-                        <strong>Username:</strong>
-                        <br/><input type="text" name="new_uname" class="inputText" placeholder="New Username..."><br/>
-                        <strong>Email Address:</strong>
-                        <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/>
-                        <strong>First Name:</strong>
-                        <br/><input type="text" name="new_fname" class="inputText" placeholder="New First Name..."><br/>
-                        <strong>Last Name:</strong>
-                        <br/><input type="text" name="new_lname" class="inputText" placeholder="New Last Name..."><br/><br/><br/>
+                    <strong>Username:</strong>
+                    <br/><input type="text" name="new_uname" class="inputText" placeholder="New Username..."><br/>
+                    <strong>Email Address:</strong>
+                    <br/><input type="text" name="new_email" class="inputText" placeholder="New Email..."><br/>
+                    <strong>First Name:</strong>
+                    <br/><input type="text" name="new_fname" class="inputText" placeholder="New First Name..."><br/>
+                    <strong>Last Name:</strong>
+                    <br/><input type="text" name="new_lname" class="inputText" placeholder="New Last Name..."><br/><br/><br/>
 
-                        <address> 
-                            <strong>Shipping Information:</strong><br/>
-                            Address: <br/><input type="text" name="new_address" class="inputText" placeholder="New Address..."><br/>
-                            State: <br/><input type="text" name="new_state" class="inputText" placeholder="New State..."><br/>
-                            City: <br/><input type="text" name="new_city" class="inputText" placeholder="New City..."><br/>
-                            ZIP: <br/><input type="text" name="new_zip" class="inputText" placeholder="New ZIP..."><br/>
-                        </address>
+                    <address> 
+                        <strong>Shipping Information:</strong><br/>
+                        Address: <br/><input type="text" name="new_address" class="inputText" placeholder="New Address..."><br/>
+                        State: <br/><input type="text" name="new_state" class="inputText" placeholder="New State..."><br/>
+                        City: <br/><input type="text" name="new_city" class="inputText" placeholder="New City..."><br/>
+                        ZIP: <br/><input type="text" name="new_zip" class="inputText" placeholder="New ZIP..."><br/>
+                    </address>
 
-                        <br/>
-                        <input type="submit" name="new_info" value="Submit">
-                    </form>
+                    <br/>
+                    <input type="submit" name="new_info" value="Submit">
+                </form>
                 {% endif %}
             </p>
 
@@ -71,6 +71,7 @@
 
 
     <!-- footer -->
+</br></br></br></br></br></br></br>
     <address class="bottomContacts">
         Contact Us!!!<br>
         (123)-456-7890<br>

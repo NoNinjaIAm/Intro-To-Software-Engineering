@@ -3,55 +3,121 @@
 {% block title %}FRUHB || CART{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/searchCartOH.css') }}">
     <script src="{{ url_for('static', filename='randomize.js') }}" defer></script>
     <!-- Add home page content here -->
 
+    <div class="headerSection">
+        <h1 class="headerWords">Your Cart:</h1>
+    </div>
 
-   
+    <!-- If Cart is Empty -->
     {% if list | length == 0 %}
+        </br>
         <p id="empty_cart">
             No items in cart
         </p>
     {% endif %}
 
 
-
+    <!-- Displaying Items in Cart-->
     {% for item in list %}
-        <div>
-            <div>
+        <div class="grid-container">
+            <div class="displayImage">
                 <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
             </div>
-            <div>
+            <div class="displayDesc">
                 <p class="totalMoney">
-                    {{ item[0] }} <br/>
-                    Item Quantity: {{ item[1] }} <br/>
-                    Item Price: ${{ item[2] }} <br/>
+                    <strong style="font-size: 30px;">{{ item['itemName'] }}</strong> <br/><br/>
+                    Price: ${{ item['price'] }} <br/>
+                    <div>
+                        Quantity: {{ item['quantity'] }}
+                        <form method="POST" class="editCartQuantity" action="/cart">
+                            <input type="hidden" name="itemID" value="{{ item['itemID'] }}">
+                            <input class="addRemoveQuantity" name="action" type="submit" value='+'>
+                            <input class="addRemoveQuantity" name="action" type="submit" value='-'>
+                        </form>
+                    </div>
+                    </br>
+                    <form method="POST" style="text-align: right;">
+                        <button class="addRemoveQuantity" type="submit" name="compareButton" value="{{ item['itemID'] }}" style="padding: 1%">
+                            Compare
+                        </button>
+                    </form><br/>
+                    <div style="text-align: right;">
+                        <strong>Total:</strong>  ${{ item['price'] *  item['quantity']}}
+                    </div>
+                    
                 </p>
-            </div>
+            
 
-            <form method="POST" class="editCartQuantity" action="/cart">
-                <input type="hidden" name="itemID" value="{{ item[3] }}">
-                <input class="addRemoveQuantity" name="action" type="submit" value='+'>
-                <input class="addRemoveQuantity" name="action" type="submit" value='-'>
-            </form>
+                
+            </div>
         </div>
-        <br/>
+    </br>
     {% endfor %}
 
     {% if cartPrice %}
     <p>
-        Cart Price: ${{ cartPrice }}
+        <h2 style="text-align: right; font-size: 30px; margin: 0 30px">Grand Total: ${{ cartPrice }}</h2>
 
         <form method="POST" action="/cart">
-            <input type="submit" name="payButton" value="Pay">
+            <input class="payBut" type="submit" name="payButton" value="Pay">
         </form>
     </p>
+    </br></br>
     {% endif %}
 
     {% if bool %}
 
-        <p>You have paid!</p>
+        <p style="font-size: 30px; background: white; border: 4px solid black; margin: 200px">You have paid!</p>
 
     {% endif %}
+
+    <!-- Compare feature -->
+    {% if compare1 != None and compare2 != None %}
+    <div class="headerSection">
+        <h1 class="headerWords">Price Comparing:</h1>
+    </div>
+    <p class="differenceBet">The difference between the {{compare1['name']}} and the {{compare2['name']}} is: <strong>${{ compare1['price'] - compare2['price'] }}</strong></p>
+    <div class="grid-container-compare">
+        <!--Item 2-->
+        <div class="displayImage1">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        <div class="displayDesc1">
+            <p class="totalMoney">
+                <strong style="font-size: 30px;">{{ compare1['name'] }}</strong> <br/><br/>
+                Price: ${{ compare1['price'] }} <br/>
+            </p>
+            <form method="POST"> 
+                <button class="addRemoveQuantity" type="submit" name="removeFirstItem">Remove</button>
+            </form>
+        </div>
+        
+
+        <!--Item 2-->
+        <div class="displayImage2">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>
+        <div class="displayDesc2">
+            <p class="totalMoney">
+                <strong style="font-size: 30px;">{{ compare2['name'] }}</strong> <br/><br/>
+                Price: ${{ compare2['price'] }} <br/>
+            </p>
+            <form method="POST"> 
+                <button class="addRemoveQuantity" type="submit" name="removeSecondItem">Remove</button>
+            </form>
+        </div>
+        
+    </div>
+    {% endif %}
+
+    <!-- footer -->
+</br></br></br></br></br></br></br>
+<address class="bottomContacts">
+    Contact Us!!!<br>
+    (123)-456-7890<br>
+    realEmailAddress@gmail.com<br>
+</address>
 {% endblock %}

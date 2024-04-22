@@ -3,46 +3,47 @@
 {% block title %}FRUHB || HOME{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/searchCartOH.css') }}">
     <script src="{{ url_for('static', filename='randomize.js') }}" defer></script>
     <!-- Add home page content here -->
 
+    <div class="headerSection">
+        <h1 class="headerWords">Order History:</h1>
+    </div>
 
     <!-- if no order history -->
     {% if order_history | length == 0 %}
-    <p id="empty_cart">
+    <p style="font-size: 50px; color: red;" id="empty_cart">
         No items purchased
     </p>
     {% endif %}
 
-
-
-
-
     <!-- printing out history -->
     {% for item in order_history %}
       <div class="grid-container">
-        <h1>Order ID - {{ item['orderID'] }} </h1>
-        <div class="item1">
+        <div class="displayImage">
             <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
         </div>
         
-        <div class="item2">
+        <div class="displayDesc">
+            <p>
+                Order ID - {{ item['orderID'] }}
+            </p>
+            <h2 style="font-size: 30px;">
+                {{ item['name'] }}
+            </h2>
             <p class="totalMoney">
                 Item Price: ${{ item['price'] }} <br/>
-                Total: ${{ item['price']*item['quantity'] }}
+                Total: ${{ item['price']*item['quantity'] }} <br/>
+                Amount: {{ item['quantity'] }} <br/><br/>
             </p>
-            <h2>
-                {{ item['quantity'] }} - {{ item['name'] }}
-            </h2>
             <p>
                 {{ item['description'] }}
             </p>
-        </div>
-
-        <form method="POST" action="/order_history">
-            <button type="submit" name="returnItem" value="{{ item['orderID'] }}">Return Item</button>
-        </form>
+            <form style="text-align: right;" method="POST" action="/order_history">
+                <button class="styleBut" type="submit" name="returnItem" value="{{ item['orderID'] }}">Return Item</button>
+            </form>
+        </div>  
       </div>  
     {% endfor %}
 
@@ -52,6 +53,7 @@
 
 
     <!-- footer -->
+</br></br></br></br></br></br></br>
     <address class="bottomContacts">
         Contact Us!!!<br>
         (123)-456-7890<br>

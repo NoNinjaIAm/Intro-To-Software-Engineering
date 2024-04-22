@@ -10,60 +10,83 @@
 
     <!-- Buzz word stuff-->
     <div class="buzzWordRow">
-        <p class="buzzWord" id="randSpin1">Big Savings! </p>
-        <p class="buzzWord" id="randSpin2">Yummy Produce!</p>
-        <p class="buzzWord" id="randSpin3">Free Shipping!</p>
-        <p class="buzzWord" id="randSpin4">Great Staff!</p>
-        <p class="buzzWord" id="randSpin5">Fast Delivery!</p>
+        <div class="buzzWordContainer" id="randSpin1">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image1" height="150px" width="150px">
+            <p class="buzzWord" id="randSpin1"><strong>Big Savings!</strong></p>
+        </div>
+
+        <div class="buzzWordContainer" id="randSpin2">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image1" height="150px" width="150px">
+            <p class="buzzWord" id="randSpin2"><strong>Yummy Produce!</strong></p>
+        </div>
+
+        <div class="buzzWordContainer" id="randSpin3">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image1" height="150px" width="150px">
+            <p class="buzzWord" id="randSpin3"><strong>Free Shipping!</strong></p>
+        </div>
+
+        <div class="buzzWordContainer" id="randSpin4">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image1" height="150px" width="150px">
+            <p class="buzzWord" id="randSpin4"><strong>Great Staff!</strong></p>
+        </div>
+
+        <div class="buzzWordContainer" id="randSpin5">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="image1" height="150px" width="150px">
+            <p class="buzzWord" id="randSpin5"><strong>Fast Delivery!</strong></p>
+        </div>
+        
     </div>
 
-
-    <h1 class="item1">Featured Fruits!!!</h1>
-    {% for item in fruits %}
-        <div>
-            <div>
-                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+    <div class="newBackground">
+        <h1 class="item1">Featured Fruits!!!</h1>
+        {% for item in fruits %}
+    
+            <div class="grid-container">
+                <div class="item2">
+                    <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+                </div>
+                <div class="item3">
+                    <p class="totalMoney">
+                        {{ item['name'] }} <br/>
+                        Item Price: ${{ item['price'] }} <br/>
+                    </p>
+                    <form class="addToCartForm" method="POST">
+                        <input class="addToCart" type="submit" name="action" value="Add to Cart">
+                        <input type="hidden" name="add" value="{{ item['itemID'] }}">
+                    </form>
+                </div>
             </div>
-            <div>
-                <p class="totalMoney">
-                    {{ item['name'] }} <br/>
-                    Item Price: ${{ item['price'] }} <br/>
-                </p>
-                <form class="addToCartForm" method="POST">
-                    <input class="addToCart" type="submit" name="action" value="Add to Cart">
-                    <input type="hidden" name="add" value="{{ item['itemID'] }}">
-                </form>
-            </div>
-        </div>
-        <br/>
-        <br/>
     {% endfor %}
 
-    <h1 class="item1">Featured Veggies!!!</h1>
-    {% for item in veggies %}
-        <div>
-            <div>
-                <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
-            </div>
-            <div>
-                <p class="totalMoney">
-                    {{ item['name'] }} <br/>
-                    Item Price: ${{ item[price] }} <br/>
-                </p>
-                <form class="addToCartForm" method="POST">
-                    <input class="addToCart" type="submit" name="action" value="Add to Cart">
-                    <input type="hidden" name="add" value="{{ item['itemID'] }}">
-                </form>
-            </div>
-        </div>
-        <br/>
-        <br/>
-    {% endfor %}
 
+    
+        <h1 class="item1">Featured Veggies!!!</h1>
+        {% for item in veggies %}
+
+            <div class="grid-container">
+                <div class="item2">
+                    <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+                </div>
+                <div class="item3">
+                    <p class="totalMoney">
+                        {{ item['name'] }} <br/>
+                        Item Price: ${{ item[price] }} <br/>
+                    </p>
+                    <form class="addToCartForm" method="POST">
+                        <input class="addToCart" type="submit" name="action" value="Add to Cart">
+                        <input type="hidden" name="add" value="{{ item['itemID'] }}">
+                    </form>
+                </div>
+            </div>
+            <br/>
+            <br/>
+    {% endfor %}
+    </div>
 
 
 
     <!-- footer -->
+</br></br></br></br></br></br></br>
     <address class="bottomContacts">
         Contact Us!!!<br>
         (123)-456-7890<br>

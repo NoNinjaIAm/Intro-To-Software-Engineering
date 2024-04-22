@@ -1,0 +1,55 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}FRUHB || Inventory{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
+    <div class="headerSection">
+        <h1 class="headerSection">Users</h1>
+        <p style="font-size: 20px;"><strong>NOTE:</strong> Account types: buyer = 0 || seller = 1 || admin = 3</p>
+    </div>
+    
+    <!-- printing out history -->
+    {% for item in userList %}
+      <div class="grid-container1">
+        <!--<div class="item1">
+            <img src="{{ url_for('static', filename='images/apple.png') }}" alt="product" height="200px" width="200px">
+        </div>-->
+        
+        <div class="item1">
+            <p class="totalMoney">Username: {{ item['username'] }}</p>
+        </div> 
+        <div class="item2">
+            <p class="totalMoney">Email: {{ item['email'] }}</p>
+        </div>
+        <div class="item3">
+            <p class="totalMoney">Account Type: {{ item['type'] }}</p>
+        </div>
+        <div class="item4">
+            <form method="POST">
+                <button name="blockUser" type="submit" value="{{ item['userID'] }}">Block User</button>
+                <span style="color:white">...</span>
+                {% if item['pending'] %}
+                <button name="approval" type="submit" value="{{ item['userID'] }}">Approve User</button>
+                {% endif %}
+            </form>
+        </div> 
+            
+        </div>   
+    {% endfor %}
+
+
+
+
+
+
+
+    <!-- footer -->
+</br></br></br></br></br></br></br>
+    <address class="bottomContacts">
+        Contact Us!!!<br>
+        (123)-456-7890<br>
+        realEmailAddress@gmail.com<br>
+    </address>
+{% endblock %}
