@@ -1,60 +1,82 @@
-/* Border Form */
-form {
-    border: 3px solid #f1f1f1;
+/* Add padding for containers */
+.bigContainer {
+    padding: 16px;
+    margin: 10% 20%;
+    background-color: rgb(236, 236, 236);
+    border-style: solid;
+    border-color: grey;
+    text-align: center;
 }
 
-
-/* Full-width inputs */
-input[type=text].textbox, input[type=password].textbox {
-    width: 100%;
-    padding: 12px, 20px;
+/*Stylized dropdown button */
+select {
+    background-color: #f2f6f4;
+    color: rgb(0, 0, 0);
+    padding: 16px 20px;
     margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+    cursor: pointer;
+    opacity: 0.9;
+    border-color: grey;
+    background: #f1f1f1;
 }
 
-
-/* Style for all buttons */
-loginButton {
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 50%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: solid;
+    border-color: grey;
+    background: #f1f1f1;
+}
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+/* Overwrite default styles for hr */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+/* Set style for the submit/register button */
+.registerbtn {
     background-color: #04AA6D;
     color: white;
-    padding: 14px 20px;
+    padding: 16px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
     width: 100%;
+    opacity: 0.9;
+}
+.registerbtn:hover {
+    opacity: 1;
+}
+/* Blue text color to links */
+a {
+    color: dodgerblue;
 }
 
-
-
-/* Cancel Button */
-.cancelbtn {
-    width: auto;
-    padding: 10px 18px;
-    background-color: #f44336;
+.errorLog {
+    color: red;
 }
 
-/* Avatar Image */
-img.avatar {
-    width: 30%;
-    margin-left: 25%;
+button {
+    background-color: #17c0e2;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+button:hover {
+    opacity: 1;
 }
 
-
-/* Add padding to containers */
-.container {
-    padding: 16px;
-}
-
-
-/* "Forgot password" text*/
-span.psw {
-    float: right;
-    padding-top: 16px;
-}
-
-
+/*I'm scared to delete this*/
 @media screen and (max-width: 300px) {
     span.psw {
         display: block;

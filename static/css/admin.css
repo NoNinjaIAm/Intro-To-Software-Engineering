@@ -1,0 +1,51 @@
+/*Users*/ 
+.item1 { grid-area: item1;}
+.item2 { grid-area: item2;}
+.item3 { grid-area: item3;}
+.item4 { grid-area: item4; margin-top: 15px;}
+.grid-container1 {
+    display: grid;
+    grid-template-areas:
+    'item1 item2 item3 item4 space space';
+    background-color: #ffffff;
+    padding: 0%;
+    gap: 1%;
+    margin: 4% 6% 4% 6%;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: grey;
+}
+
+
+/*Inventory*/
+.displayImage { grid-area: image; padding: 0; text-align: center;}
+.displayDesc { grid-area: desc; padding: 1%; text-align: left;}
+.grid-container2 {
+    display: grid;
+    grid-template-areas:
+    'image desc desc';
+    background-color: #ab3735;
+    padding: 1.5%;
+    gap: 1%;
+    margin: 3% 10%;
+    width: 70%;
+}
+
+.grid-container2 > div {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+/*Both*/
+.headerSection {
+    background-color: #bda470;;
+    overflow: hidden;
+    float: left;
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 0px;
+    width: 100%;
+    display: inline;
+    padding: 1%;
+    flex: content;
+    color: white;
+    font-size: 65px;
+}
