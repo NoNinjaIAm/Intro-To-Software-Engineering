@@ -229,11 +229,3 @@ def generate_featured(type=random.randint(0,1)):
             VALUES ({featuredID}, {itemID}, {type});
             """, fetch_results=False)
 
-
-generate_user()
-generate_item()
-generate_cart()
-generate_payment_info()
-generate_shipping_info()
-generate_order()
-generate_featured()
