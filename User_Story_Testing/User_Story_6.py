@@ -1,30 +1,35 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
+import time
 # Initialize Chrome WebDriver
 driver = webdriver.Firefox()
 
 # Navigate to the Home Page
-driver.get("http://127.0.0.1:5000/")
+driver.get("http://127.0.0.1:5000/login")
+
+def login():
+    username_field = driver.find_element(By.NAME, "username")
+    username_field.send_keys("eah123")
+
+    time.sleep(2)
+
+    password_field = driver.find_element(By.NAME, "password")
+    password_field.send_keys("123")
+
+    time.sleep(2)
+
+    login_button = driver.find_element(By.CLASS_NAME, "loginButton")
+    login_button.click()
+
+login()
+
+time.sleep(2)
 
 cart_icon = driver.find_element(By.NAME, "cart")
 cart_icon.click()
 
-proceed_payment = driver.find_element(By.CLASS_NAME, "proceedPayment")
-proceed_payment.click()
+time.sleep(2)
 
-cardholder_name = driver.find_element(By.ID, "name")
-cardholder_name.send_keys("Jimmy Neutron")
-
-card_number = driver.find_element(By.ID, "cardNumber")
-card_number.send_keys(1234567890123456)
-
-cvv_number = driver.find_element(By.ID, "cvvNumber")
-cvv_number.send_keys(123)
-
-expiration_date = driver.find_element(By.ID, "expDate")
-expiration_date.send_keys(52024)
-
-submit_payment = driver.find_element(By.CLASS_NAME, "settingsButton")
-submit_payment.click()
+pay_button = driver.find_element(By.NAME, "payButton")
+pay_button.click()
