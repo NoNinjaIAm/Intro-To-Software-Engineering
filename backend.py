@@ -58,7 +58,7 @@ class User:
 	def from_db_to_class_cart(self):
 		with sf.create_connection('database.db') as conn:
 			results = sf.execute_statement(conn, f'SELECT itemID, quantity FROM cart WHERE userID={self.userID}')
-			if results == []:
+			if not results:
 				self.cartData = dict()
 			else:
 				self.cartData.clear()
