@@ -14,11 +14,13 @@ def app():
 def test_home_page_seller(app):
     backend.current_user.type = 1
     with sf.create_connection('database.db') as conn:
-        backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user WHERE type = 1")[0][0]
+        backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user WHERE type = 1")
             # generate a seller if none exist
-        if backend.current_user.userID == None:
+        if not backend.current_user.userID:
             dg.generate_user(1)
             backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user WHERE type = 1")[0][0]
+        else:
+            backend.current_user.userID = backend.current_user.userID[0][0]
 
     with app.test_client() as client:
         response = client.post('/')
@@ -28,11 +30,13 @@ def test_home_page_seller(app):
 def test_home_page_customer(app):
     backend.current_user.type = 0
     with sf.create_connection('database.db') as conn:
-        backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user WHERE type = 0")[0][0]
+        backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user WHERE type = 0")
             # generate a customer if none exist
-        if backend.current_user.userID == None:
+        if not backend.current_user.userID:
             dg.generate_user(0)
             backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user WHERE type = 0")[0][0]
+        else:
+            backend.current_user.userID = backend.current_user.userID[0][0]
 
     with app.test_client() as client:
         response = client.post('/')
@@ -50,10 +54,13 @@ def test_home_page_invalid(app):
 def test_successful_login(app):
     credentials = []
     with sf.create_connection('database.db') as conn:
-        userID = sf.execute_statement(conn, "SELECT userID from user")[0][0]
+        userID = sf.execute_statement(conn, "SELECT userID from user")
             # generate a customer if none exist
-        if userID == None:
+        if not userID:
             dg.generate_user()
+            userID = sf.execute_statement(conn, "SELECT userID from user")[0][0]
+        else:
+            userID = userID[0][0]
         credentials = sf.execute_statement(conn, f'SELECT username, password_hash FROM user WHERE userID = {userID}')
     with app.test_client() as client:
         response = client.post("/login", data={"login": "", "username": credentials[0][0], "password": credentials[0][1]})
@@ -70,26 +77,39 @@ def test_register_good(app):
     valid_characters = string.ascii_letters + string.digits
     # random 10-character string for username, password, email
     username = ''.join(random.choices(valid_characters, k=10))
-    password = ''.join(random.choices(valid_characters, k=10))
+    password = ''
+    password += random.choice(string.ascii_lowercase)
+    password += random.choice(string.ascii_uppercase)
+    password += random.choice(string.digits)
+    password += '$'
+    password += ''.join(random.choices(valid_characters, k=5))
+    
     email = username + "@gmail.com"
     with app.test_client() as client:
         response = client.post("/register", data={"email": email, "uname": username, "psw": password, "psw-repeat": password, "user_type": 0})
         assert response.status_code == 302
 
-# # test register page with taken username
-# def test_register_bad_username(app):
-#     valid_characters = string.ascii_letters + string.digits
-#     # random 10-character string for username, password, email
-#     username = ''
-#     with sf.create_connection('database.db') as conn:
-#         username = sf.execute_statement(conn, "SELECT username from user")[0][0]
-#         if username == None:
-#             pass
-#     password = ''.join(random.choices(valid_characters, k=10))
-#     email = username + "@gmail.com"
-#     with app.test_client() as client:
-#         response = client.post("/register", data={"email": email, "uname": username, "psw": password, "psw-repeat": password, "user_type": 0})
-#         assert response.status_code == 200
+# test register page with taken username
+def test_register_bad_username(app):
+    valid_characters = string.ascii_letters + string.digits
+    # random 10-character string for username, password, email
+    username = ''
+    with sf.create_connection('database.db') as conn:
+        username = sf.execute_statement(conn, "SELECT username from user")
+        if username:
+            username = username[0][0]
+        else:
+            pass
+    password = ''
+    password += random.choice(string.ascii_lowercase)
+    password += random.choice(string.ascii_uppercase)
+    password += random.choice(string.digits)
+    password += '$'
+    password += ''.join(random.choices(valid_characters, k=5))
+    email = username + "@gmail.com"
+    with app.test_client() as client:
+        response = client.post("/register", data={"email": email, "uname": username, "psw": password, "psw-repeat": password, "user_type": 0})
+        assert response.status_code == 200
 
 
 # test register page with incorrectly-repeated password
@@ -97,7 +117,12 @@ def test_register_bad_password(app):
     valid_characters = string.ascii_letters + string.digits
     # random 10-character string for username, password, email
     username = ''.join(random.choices(valid_characters, k=10))
-    password = ''.join(random.choices(valid_characters, k=10))
+    password = ''
+    password += random.choice(string.ascii_lowercase)
+    password += random.choice(string.ascii_uppercase)
+    password += random.choice(string.digits)
+    password += '$'
+    password += ''.join(random.choices(valid_characters, k=5))
     email = username + "@gmail.com"
     with app.test_client() as client:
         response = client.post("/register", data={"email": email, "uname": username, "psw": password, "psw-repeat": "INVALID_PASSWORD", "user_type": 0})
@@ -106,6 +131,7 @@ def test_register_bad_password(app):
 
 # settings page - test new data upload
 def test_settings_new_data(app):
+    backend.current_user.userID = 1
     backend.current_user.type = 0
     valid_characters = string.ascii_letters + string.digits
     username = ''.join(random.choices(valid_characters, k=10))
@@ -113,29 +139,34 @@ def test_settings_new_data(app):
     # shipping data
     street = ''.join(random.choices(valid_characters, k=10))
     city = ''.join(random.choices(valid_characters, k=10))
-    state = ''.join(random.choices(valid_characters, k=2))
-    zip = ''.join(random.choices(valid_characters, k=5))
+    state = ''.join(random.choices(string.ascii_uppercase, k=2))
+    zip = ''.join(random.choices(string.digits, k=5))
     # payment data
-    cardNumber = random.randint(0, 1000)
+    cardNumber = int(''.join(random.choices(string.digits, k=16)))
     generic_names = ["Taylor", "Jordan", "Casey", "Morgan", "Alex", "Jamie", "Reese", "Blake", "Avery", "Parker", "Quinn", "Riley", "Sawyer", "Harley", "Ellis"]
     cardholderName = " ".join(random.choices(generic_names, k=2))
-    cardDate = "2026-01-01" 
+    cardDate = "01/01" 
 
     with app.test_client() as client:
         response = client.post('/settings', data={'new_info': '', 'new_uname': username, 'new_email': email, 'new_street': street, 'new_state': state, 'new_city': city, 'new_zip': zip, 'new_card_num': cardNumber, 'new_cardholder_name': cardholderName, 'new_date': cardDate})
+        print({'new_info': '', 'new_uname': username, 'new_email': email, 'new_street': street, 'new_state': state, 'new_city': city, 'new_zip': zip, 'new_card_num': cardNumber, 'new_cardholder_name': cardholderName, 'new_date': cardDate})
+
         assert response.status_code == 200
 
 # settings page - test delete account
 def test_settings_delete_account(app):
+    backend.current_user.userID = 1
     backend.current_user.type = 0
     with sf.create_connection('database.db') as conn:
-        backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user")[-1][0]
-        if backend.current_user.userID == None:
+        backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user")
+        if not backend.current_user.userID:
             dg.generate_user()
             backend.current_user.userID = sf.execute_statement(conn, "SELECT userID from user")[-1][0]
+        else:
+            backend.current_user.userID = backend.current_user.userID[-1][0]
     with app.test_client() as client:
         response = client.post('/settings', data={'deleteAccount': ''})
-        assert response.status_code == 200
+        assert response.status_code == 302
 
 # settings page - test log out
 def test_settings_logout(app):
@@ -159,10 +190,12 @@ def test_search_query(app):
     backend.current_user.type = 0
     query = ''
     with sf.create_connection('database.db') as conn:
-        query = sf.execute_statement(conn, "SELECT itemName from inventory")[0][0]
-        if backend.current_user.userID == None:
+        query = sf.execute_statement(conn, "SELECT itemName from inventory")
+        if not backend.current_user.userID:
             dg.generate_item()
             query = sf.execute_statement(conn, "SELECT itemName from inventory")[0][0]
+        else:
+            query = query[0][0]
     with app.test_client() as client:
         response = client.post('/search', data={'query': query})
         assert response.status_code == 200
@@ -182,17 +215,20 @@ def test_search_add_to_cart(app):
     itemID = ''
     with sf.create_connection('database.db') as conn:
         maxQty = sf.execute_statement(conn, f"SELECT MAX(quantity) FROM cart WHERE userID = {backend.current_user.userID}")[0][0]
-        if maxQty == None:
+        if not maxQty:
             dg.generate_cart()
             maxQty = sf.execute_statement(conn, f"SELECT MAX(quantity) FROM cart WHERE userID = {backend.current_user.userID}")[0][0]
-        itemID = sf.execute_statement(conn, f"SELECT itemID from inventory WHERE quantity > {maxQty}")[0][0]
-        if itemID == None:
+        itemID = sf.execute_statement(conn, f"SELECT itemID from inventory WHERE quantity > {maxQty}")
+        if not itemID:
             dg.generate_item()
             itemID = sf.execute_statement(conn, f"SELECT itemID from inventory WHERE quantity > {maxQty}")[0][0]
+        else:
+            itemID = itemID[0][0]
+
     
     with app.test_client() as client:
         response = client.post('/search', data={'action': '', 'add': itemID})
-        assert response.status_code == 200
+        assert response.status_code == 302
 
 # cart - test not logged in
 def test_cart_unauthenticated(app):
@@ -207,18 +243,22 @@ def test_cart_add_to_cart(app):
     backend.current_user.type = 0
     itemID = ''
     with sf.create_connection('database.db') as conn:
-        maxQty = sf.execute_statement(conn, f"SELECT MAX(quantity) FROM cart WHERE userID = {backend.current_user.userID}")[0][0]
-        if maxQty == None:
+        maxQty = sf.execute_statement(conn, f"SELECT MAX(quantity) FROM cart WHERE userID = {backend.current_user.userID}")
+        if not maxQty:
             dg.generate_cart()
             maxQty = sf.execute_statement(conn, f"SELECT MAX(quantity) FROM cart WHERE userID = {backend.current_user.userID}")[0][0]
-        itemID = sf.execute_statement(conn, f"SELECT itemID from inventory WHERE quantity > {maxQty}")[0][0]
-        if itemID == None:
+        else:
+            maxQty = maxQty[0][0]
+        itemID = sf.execute_statement(conn, f"SELECT itemID from inventory WHERE quantity > {maxQty}")
+        if not itemID:
             dg.generate_item()
             itemID = sf.execute_statement(conn, f"SELECT itemID from inventory WHERE quantity > {maxQty}")[0][0]
+        else:
+            itemID = itemID[0][0]
     
     with app.test_client() as client:
         response = client.post('/cart', data={'action': '+', 'itemID': itemID})
-        assert response.status_code == 200
+        assert response.status_code == 302
 
 # cart - test remove from cart
 def test_cart_remove_from_cart(app):
@@ -226,15 +266,16 @@ def test_cart_remove_from_cart(app):
     backend.current_user.type = 0
     itemID = ''
     with sf.create_connection('database.db') as conn:
-        itemID = sf.execute_statement(conn, f"SELECT itemID from cart WHERE userID = {backend.current_user.userID} AND quantity > 0")[0][0]
-        if itemID == None:
+        itemID = sf.execute_statement(conn, f"SELECT itemID from cart WHERE userID = {backend.current_user.userID} AND quantity > 0")
+        if not itemID:
             dg.generate_cart()
             itemID = sf.execute_statement(conn, f"SELECT itemID from cart WHERE userID = {backend.current_user.userID} AND quantity > 0")[0][0]
+        else:
+            itemID = itemID[0][0]
 
     with app.test_client() as client:
         response = client.post('/cart', data={'action': '-', 'itemID': itemID})
-        # app calls redirect when deleting last instance of item from cart, else calls render_template
-        assert response.status_code == 200 or response.status_code == 302
+        assert response.status_code == 302
 
 # cart - test pay for cart
 def test_cart_pay_for_cart(app):
@@ -242,8 +283,8 @@ def test_cart_pay_for_cart(app):
     backend.current_user.type = 0
 
     with sf.create_connection('database.db') as conn:
-        itemID = sf.execute_statement(conn, f"SELECT itemID from cart WHERE userID = {backend.current_user.userID} AND quantity > 0")[0][0]
-        if itemID == None:
+        itemID = sf.execute_statement(conn, f"SELECT itemID from cart WHERE userID = {backend.current_user.userID} AND quantity > 0")
+        if not itemID:
             dg.generate_cart()
 
     with app.test_client() as client:

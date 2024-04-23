@@ -24,243 +24,240 @@ def new_id(tableID, table):
 
 
 class User:
-  def __init__(self, userID, username):
-    self.userID = 0
-    self.username = username
-    self.password = None
-    self.type = None
-    self.fname = None
-    self.lname = None
-    self.email = None
-    self.shippingData = None
-    self.shipping_ptr = 0
-    self.paymentData = None
-    self.payment_ptr = 0
-    self.cartData = None
-    self.cart_ptr = 0
-    # structured like itemID: quantity
+	def __init__(self, userID, username):
+		self.userID = userID
+		self.username = username
+		self.password = ''
+		self.type = 0
+		self.fname = ''
+		self.lname = ''
+		self.email = ''
+		self.shippingData = {'street': '', 'city': '', 'state': '', 'country': '', 'zip': 0}
+		self.shipping_ptr = 0
+		self.paymentData = {'cardNumber': 0, 'cardholderName': '', 'cardDate': ''}
+		self.payment_ptr = 0
+		self.cartData = dict()
+		self.cart_ptr = 0
+		# structured like itemID: quantity
 
-  def reset(self):
-  	self.userID = 0
-  	self.username = None
-  	self.password = None
-  	self.type = None
-  	self.fname = None
-  	self.lname = None
-  	self.email = None
-  	self.shippingData = None
-  	self.shipping_ptr = 0
-  	self.paymentData = None
-  	self.payment_ptr = 0
-  	self.cartData = None
-  	self.cart_ptr = 0				# formerly cart_ptr
+	def reset(self):
+		self.userID = 0
+		self.username = ''
+		self.password = ''
+		self.type = 0
+		self.fname = ''
+		self.lname = ''
+		self.email = ''
+		self.shippingData = {'street': '', 'city': '', 'state': '', 'country': '', 'zip': 0}
+		self.shipping_ptr = 0
+		self.paymentData = {'cardNumber': 0, 'cardholderName': '', 'cardDate': ''}
+		self.payment_ptr = 0
+		self.cartData = dict()
+		self.cart_ptr = 0				# formerly cart_ptr
 
-  def from_db_to_class_cart(self):
-  	if self.cartData == None or self.cartData == {}:
-  		return
-  	with sf.create_connection('database.db') as conn:
-  		results = sf.execute_statement(conn, f'SELECT itemID, quantity FROM cart WHERE userID={self.userID}')
+	def from_db_to_class_cart(self):
+		with sf.create_connection('database.db') as conn:
+			results = sf.execute_statement(conn, f'SELECT itemID, quantity FROM cart WHERE userID={self.userID}')
+			if results == []:
+				self.cartData = dict()
+			else:
+				self.cartData.clear()
+				for item in results:
+					self.cartData[int(item[0])] = item[1]
 
-  		if results == []:
-  			self.cartData = None
-  		else:
-  			self.cartData.clear()
-  			for item in results:
-  				self.cartData[int(item[0])] = item[1]
+		print("cart =>", self.cartData)
 
-  	print("cart =>", self.cartData)
+	def from_db_to_class(self):
+		if self.userID != None:
+			with sf.create_connection('database.db') as conn:
+					# get user data
+					data = sf.execute_statement(conn, f'SELECT username, type, fname, lname, email, cart_ptr FROM user WHERE userID={self.userID}')[0]
+					self.username = data[0]
+					self.type = data[1]
+					self.fname = data[2]
+					self.lname = data[3]
+					self.email = data[4]
+					self.cart_ptr = data[5]
+					
+					# get payment data
+					data = sf.execute_statement(conn, f'SELECT cardNumber, cardholderName, cardDate FROM paymentInfo WHERE userID={self.userID}')
 
-  def from_db_to_class(self):
-  	if self.userID != None:
-	  	with sf.create_connection('database.db') as conn:
-			  # get user data
-			  data = sf.execute_statement(conn, f'SELECT username, type, fname, lname, email, cart_ptr FROM user WHERE userID={self.userID}')[0]
-			  self.username = data[0]
-			  self.type = data[1]
-			  self.fname = data[2]
-			  self.lname = data[3]
-			  self.email = data[4]
-			  self.cart_ptr = data[5]
-			  
-			  # get payment data
-			  data = sf.execute_statement(conn, f'SELECT cardNumber, cardholderName, cardDate FROM paymentInfo WHERE userID={self.userID}')
+					if data == []:
+						self.paymentData = {
+							'cardNumber': 0,
+							'cardholderName': None,
+							'cardDate': None
+						}
 
-			  if data == []:
-			  	self.paymentData = {
-						'cardNumber': 0,
-						'cardholderName': None,
-						'cardDate': None
-					}
+					else:
+						data = data[0]
+						self.paymentData = {
+							'cardNumber': data[0],
+							'cardholderName': data[1],
+							'cardDate': data[2]
+						}
 
-			  else:
-			  	data = data[0]
-			  	self.paymentData = {
-						'cardNumber': data[0],
-						'cardholderName': data[1],
-						'cardDate': data[2]
-					}
-
-				
-			  data = sf.execute_statement(conn, f'SELECT street, city, state, zip, country FROM shippingInfo WHERE userID={self.userID}')
-			  if data == []:
-			  	self.shippingData = {
-						'street': None,
-						'city': None,
-						'state': None,
-						'zip': 0,
-						'country': None
-					}
-			  else:
-			  	data = data[0]
-			  	self.shippingData = {
-						'street': data[0],
-						'city': data[1],
-						'state': data[2],
-						'zip': data[3],
-						'country': data[4]
-					}
+					
+					data = sf.execute_statement(conn, f'SELECT street, city, state, zip, country FROM shippingInfo WHERE userID={self.userID}')
+					if data == []:
+						self.shippingData = {
+							'street': '',
+							'city': '',
+							'state': '',
+							'zip': 0,
+							'country': ''
+						}
+					else:
+						data = data[0]
+						self.shippingData = {
+							'street': data[0],
+							'city': data[1],
+							'state': data[2],
+							'zip': data[3],
+							'country': data[4]
+						}
 
 
-			  data = sf.execute_statement(conn, f'SELECT itemID, quantity FROM cart WHERE userID={self.userID}')
-			  if data == []:
-			  	self.cartData = None
-			  else:
-			  	self.cartData = {}
-			  	for item in data:
-				  	self.cartData[item[0]] = item[1]
- 
-  def to_db_from_class_user(self):
-  	if self.userID != None:
-  		with sf.create_connection('database.db') as conn:
-  			uname = self.username
-  			email = self.email
-  			fname = self.fname
-  			lname = self.lname
-  			type = self.type
+					data = sf.execute_statement(conn, f'SELECT itemID, quantity FROM cart WHERE userID={self.userID}')
+					if data == []:
+						self.cartData = None
+					else:
+						self.cartData = {}
+						for item in data:
+							self.cartData[item[0]] = item[1]
 
-  			isUserInTable = sf.execute_statement(conn, f'SELECT userID FROM user WHERE userID={self.userID}')
+	def to_db_from_class_user(self):
+		if self.userID != None:
+			with sf.create_connection('database.db') as conn:
+				uname = self.username
+				email = self.email
+				fname = self.fname
+				lname = self.lname
+				type = self.type
 
-  			if (isUserInTable == []):
-  				self.userID = new_id('userID', 'user')
-  				shipping_ptr = new_id('shippingID', 'shippingInfo')
-  				payment_ptr = new_id('paymentID', 'paymentInfo')
-  				cart_ptr = new_id('cartID', 'cart')
+				isUserInTable = sf.execute_statement(conn, f'SELECT userID FROM user WHERE userID={self.userID}')
 
-
-  				# adding to user table
-  				sf.execute_statement(conn, f'INSERT INTO user (userID, username, password_hash, email, fname, lname, type, shipping_ptr, payment_ptr, cart_ptr) VALUES ({self.userID}, \'{uname}\', \'{self.password}\', \'{email}\', \'{fname}\', \'{lname}\', {type}, {shipping_ptr}, {payment_ptr}, {cart_ptr})');
-  			else:
-  				sf.execute_statement(conn, f'UPDATE user SET username=\'{uname}\',email=\'{email}\',fname=\'{fname}\',lname=\'{lname}\' WHERE userID=\'{self.userID}\'')
-
-  def to_db_from_class_payment(self):
-  	if self.userID != None:
-  		with sf.create_connection('database.db') as conn:
-  			# payment information
-  			num = self.paymentData['cardNumber']
-  			name = self.paymentData['cardholderName']
-  			date = self.paymentData['cardDate']
+				if (isUserInTable == []):
+					self.userID = new_id('userID', 'user')
+					shipping_ptr = new_id('shippingID', 'shippingInfo')
+					payment_ptr = new_id('paymentID', 'paymentInfo')
+					cart_ptr = new_id('cartID', 'cart')
 
 
-  			isUserInTable = sf.execute_statement(conn, f'SELECT userID FROM paymentInfo WHERE userID={self.userID}')
+					# adding to user table
+					sf.execute_statement(conn, f'INSERT INTO user (userID, username, password_hash, email, fname, lname, type, shipping_ptr, payment_ptr, cart_ptr) VALUES ({self.userID}, \'{uname}\', \'{self.password}\', \'{email}\', \'{fname}\', \'{lname}\', {type}, {shipping_ptr}, {payment_ptr}, {cart_ptr})')
+				else:
+					sf.execute_statement(conn, f'UPDATE user SET username=\'{uname}\',email=\'{email}\',fname=\'{fname}\',lname=\'{lname}\' WHERE userID=\'{self.userID}\'')
 
-  			if (isUserInTable == []):
-  				newPaymentID = new_id('paymentID', 'paymentInfo')
-
-  				# making connection from user to paymentInfo
-  				sf.execute_statement(conn, f'UPDATE user SET payment_ptr={newPaymentID} WHERE userID={self.userID}') 
-
-  				# adding to paymentInfo table
-  				sf.execute_statement(conn, f'INSERT INTO paymentInfo (paymentID, userID, cardNumber, cardholderName, cardDate) VALUES ({newPaymentID}, {self.userID}, {num}, \'{name}\', {date}');
-
-  			else:
-  				sf.execute_statement(conn, f'UPDATE paymentInfo SET cardNumber=\'{num}\',cardholderName=\'{name}\',cardDate=\'{date}\' WHERE userID=\'{self.userID}\'')
-  	
-  def to_db_from_class_shipping(self):
-  	if self.userID != None:
-  		with sf.create_connection('database.db') as conn:
-  			street = self.shippingData['street']
-  			city = self.shippingData['city']
-  			state = self.shippingData['state']
-  			zip = self.shippingData['zip']
-  			country = self.shippingData['country']
+	def to_db_from_class_payment(self):
+		if self.userID != None:
+			with sf.create_connection('database.db') as conn:
+				# payment information
+				num = self.paymentData['cardNumber']
+				name = self.paymentData['cardholderName']
+				date = self.paymentData['cardDate']
 
 
-  			isUserInTable = sf.execute_statement(conn, f'SELECT userID FROM shippingInfo WHERE userID={self.userID}')
+				isUserInTable = sf.execute_statement(conn, f'SELECT userID FROM paymentInfo WHERE userID={self.userID}')
 
-  			if (isUserInTable == []):
-  				newShippingID = new_id('shippingID', 'shippingInfo')
+				if (isUserInTable == []):
+					newPaymentID = new_id('paymentID', 'paymentInfo')
 
-  				# making connection from user to shippingInfo
-  				sf.execute_statement(conn, f'UPDATE user SET shipping_ptr={newShippingID} WHERE userID={self.userID}') 
+					# making connection from user to paymentInfo
+					sf.execute_statement(conn, f'UPDATE user SET payment_ptr={newPaymentID} WHERE userID={self.userID}') 
 
-  				# adding to shippingInfo table
-  				sf.execute_statement(conn, f'INSERT INTO shippingInfo (shippingID, userID, street, city, state, zip, country) VALUES ({newShippingID}, {self.userID}, \'{street}\', \'{city}\', \'{state}\', \'{zip}\', \'{country}\'');
+					# adding to paymentInfo table
+					sf.execute_statement(conn, f'INSERT INTO paymentInfo (paymentID, userID, cardNumber, cardholderName, cardDate) VALUES ({newPaymentID}, {self.userID}, {num}, \'{name}\', {date}')
 
-  			else:
-  				sf.execute_statement(conn, f'UPDATE shippingInfo SET street=\'{street}\', city=\'{city}\', state=\'{state}\', zip=\'{zip}\', country=\'{country}\' WHERE userID=\'{self.userID}\'')
+				else:
+					sf.execute_statement(conn, f'UPDATE paymentInfo SET cardNumber=\'{num}\',cardholderName=\'{name}\',cardDate=\'{date}\' WHERE userID=\'{self.userID}\'')
+		
+	def to_db_from_class_shipping(self):
+		if self.userID != None:
+			with sf.create_connection('database.db') as conn:
+				street = self.shippingData['street']
+				city = self.shippingData['city']
+				state = self.shippingData['state']
+				zip = self.shippingData['zip']
+				country = self.shippingData['country']
 
-  def to_db_from_class_cart(self):
-  	if self.userID != None:
-  		with sf.create_connection('database.db') as conn:
-  			# clearing user from table and sending in new info
-  			sf.execute_statement(conn, f'DELETE FROM cart WHERE userID={self.userID}')
+
+				isUserInTable = sf.execute_statement(conn, f'SELECT userID FROM shippingInfo WHERE userID={self.userID}')
+
+				if (isUserInTable == []):
+					newShippingID = new_id('shippingID', 'shippingInfo')
+
+					# making connection from user to shippingInfo
+					sf.execute_statement(conn, f'UPDATE user SET shipping_ptr={newShippingID} WHERE userID={self.userID}') 
+
+					# adding to shippingInfo table
+					sf.execute_statement(conn, f'INSERT INTO shippingInfo (shippingID, userID, street, city, state, zip, country) VALUES ({newShippingID}, {self.userID}, \'{street}\', \'{city}\', \'{state}\', \'{zip}\', \'{country}\'');
+
+				else:
+					sf.execute_statement(conn, f'UPDATE shippingInfo SET street=\'{street}\', city=\'{city}\', state=\'{state}\', zip=\'{zip}\', country=\'{country}\' WHERE userID=\'{self.userID}\'')
+
+	def to_db_from_class_cart(self):
+		if self.userID != None:
+			with sf.create_connection('database.db') as conn:
+				# clearing user from table and sending in new info
+				sf.execute_statement(conn, f'DELETE FROM cart WHERE userID={self.userID}')
 
 
-  			# if cart empty and if cart unempty
-  			print("db cart =>", self.cartData)
-  			if self.cartData == None:
-  				pass
-  			else:
-	  			for item in self.cartData:
-	  				print("cart item",item,self.cartData[item])
-	  				itemID = item
-	  				quantity = self.cartData[item]
-	  				price = sf.execute_statement(conn, f'SELECT price FROM inventory WHERE itemID={itemID}')
-	  				if price == []:
-	  					print('not in inventory')
-	  				else:
-	  					price = price[0][0]
+				# if cart empty and if cart unempty
+				print("db cart =>", self.cartData)
+				if self.cartData == None:
+					pass
+				else:
+					for item in self.cartData:
+						print("cart item",item,self.cartData[item])
+						itemID = item
+						quantity = self.cartData[item]
+						price = sf.execute_statement(conn, f'SELECT price FROM inventory WHERE itemID={itemID}')
+						if price == []:
+							print('not in inventory')
+						else:
+							price = price[0][0]
 
-	  				newCartID = new_id('cartID', 'cart')
-	  				sf.execute_statement(conn, f'INSERT INTO cart (cartID, userID, itemID, quantity) VALUES ({newCartID}, {self.userID}, {itemID}, {quantity})');
+						newCartID = new_id('cartID', 'cart')
+						sf.execute_statement(conn, f'INSERT INTO cart (cartID, userID, itemID, quantity) VALUES ({newCartID}, {self.userID}, {itemID}, {quantity})')
 
-  def add_to_cart(self, itemID, quantity=1):
-  	with sf.create_connection('database.db') as conn:
-  		results = sf.execute_statement(conn, f'SELECT itemID, quantity FROM cart WHERE userID={self.userID}')
-  		if results == []:
-  			self.cartData = {itemID: quantity}
-  			print('add_to_cart =>',self.cartData)
-  			self.to_db_from_class_cart()
+	def add_to_cart(self, itemID, quantity=1):
+		with sf.create_connection('database.db') as conn:
+			results = sf.execute_statement(conn, f'SELECT itemID, quantity FROM cart WHERE userID={self.userID}')
+			if not results:
+				self.cartData = {itemID: quantity}
+				print('add_to_cart =>',self.cartData)
+				self.to_db_from_class_cart()
 
-  		else:
-  			cartQuantity = sf.execute_statement(conn, f'SELECT quantity FROM cart WHERE userID={self.userID} AND itemID={itemID}')
-  			inventoryQuantity = sf.execute_statement(conn, f'SELECT quantity FROM inventory WHERE itemID={itemID}')
-  			if inventoryQuantity != []:
-  				inventoryQuantity = inventoryQuantity[0][0]
-  				print("inventory quantity:",inventoryQuantity)
-  			else:
-  					return
+			else:
+				cartQuantity = sf.execute_statement(conn, f'SELECT quantity FROM cart WHERE userID={self.userID} AND itemID={itemID}')
+				inventoryQuantity = sf.execute_statement(conn, f'SELECT quantity FROM inventory WHERE itemID={itemID}')
+				if inventoryQuantity:
+					inventoryQuantity = inventoryQuantity[0][0]
+					print("inventory quantity:",inventoryQuantity)
+				else:
+					return
 
-  			if (cartQuantity != []):
-  				cartQuantity = cartQuantity[0][0]
-  				newQuantity = cartQuantity + quantity
+				if (cartQuantity):
+					cartQuantity = cartQuantity[0][0]
+					newQuantity = cartQuantity + quantity
 
-  				if newQuantity < 1:
-  					sf.execute_statement(conn, f'DELETE FROM cart WHERE userID={self.userID} AND itemID={itemID}')
-  					self.from_db_to_class_cart()
-  				elif newQuantity > inventoryQuantity:
-  					print("preventing cart from being more than inventory")
-  					newQuantity = inventoryQuantity
+					if newQuantity < 1:
+						sf.execute_statement(conn, f'DELETE FROM cart WHERE userID={self.userID} AND itemID={itemID}')
+					elif newQuantity > inventoryQuantity:
+						print("preventing cart from being more than inventory")
+						newQuantity = inventoryQuantity
 
-  				sf.execute_statement(conn, f'UPDATE cart SET quantity={newQuantity} WHERE itemID={itemID} AND userID={self.userID}')
-  			else:
-  				cartQuantity = quantity
-  				newCartId = new_id('cartID', 'cart')
+					sf.execute_statement(conn, f'UPDATE cart SET quantity={newQuantity} WHERE itemID={itemID} AND userID={self.userID}')
+					self.from_db_to_class_cart()
+				else:
+					cartQuantity = quantity
+					newCartId = new_id('cartID', 'cart')
 
-  				print("inserting new item into cart db")
-  				sf.execute_statement(conn, f'INSERT INTO cart (cartID, userID, itemID, quantity) VALUES ({newCartId}, {current_user.userID}, {itemID}, {quantity})')
-  				current_user.from_db_to_class_cart()
-  		
+					print("inserting new item into cart db")
+					sf.execute_statement(conn, f'INSERT INTO cart (cartID, userID, itemID, quantity) VALUES ({newCartId}, {current_user.userID}, {itemID}, {quantity})')
+					self.from_db_to_class_cart()
+		
 
 class ItemsToCompare:
 	def __init__(self):
@@ -853,7 +850,7 @@ def cart_page():
 			# add data to orders table
 			with sf.create_connection('database.db') as conn:
 				cart, total = get_cart(current_user)
-
+				
 				# consistent variables
 				cardNumber = current_user.paymentData['cardNumber']
 				cardholderName = current_user.paymentData['cardholderName']
@@ -866,7 +863,6 @@ def cart_page():
 				country = current_user.shippingData['country']
 
 				orderTime = time.time()
-
 
 				# add data to orders table
 				for item in cart:
